@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package gcm.play.android.samples.com.gcmquickstart;
+package activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,6 +31,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import gcm.play.android.samples.com.gcmquickstart.R;
+import notification.QuickstartPreferences;
+import notification.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity {
 

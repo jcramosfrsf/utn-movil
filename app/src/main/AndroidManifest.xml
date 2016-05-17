@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="gcm.play.android.samples.com.gcmquickstart" >
+    package="com.tomasguti.utnmovil" >
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="gcm.play.android.samples.com.gcmquickstart.MainActivity"
+            android:name="activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
 
         <!-- [START gcm_listener] -->
         <service
-            android:name="gcm.play.android.samples.com.gcmquickstart.MyGcmListenerService"
+            android:name="notification.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -45,7 +45,7 @@
         <!-- [END gcm_listener] -->
         <!-- [START instanceId_listener] -->
         <service
-            android:name="gcm.play.android.samples.com.gcmquickstart.MyInstanceIDListenerService"
+            android:name="notification.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
@@ -53,7 +53,7 @@
         </service>
         <!-- [END instanceId_listener] -->
         <service
-            android:name="gcm.play.android.samples.com.gcmquickstart.RegistrationIntentService"
+            android:name="notification.RegistrationIntentService"
             android:exported="false">
         </service>
     </application>

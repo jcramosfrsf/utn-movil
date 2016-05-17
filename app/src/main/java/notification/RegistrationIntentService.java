@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package gcm.play.android.samples.com.gcmquickstart;
+package notification;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -28,6 +28,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
+
+import gcm.play.android.samples.com.gcmquickstart.R;
 
 public class RegistrationIntentService extends IntentService {
 
