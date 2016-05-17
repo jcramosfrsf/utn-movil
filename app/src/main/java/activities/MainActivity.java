@@ -31,8 +31,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.tomasguti.utnmovil.R;
 
-import gcm.play.android.samples.com.gcmquickstart.R;
 import notification.QuickstartPreferences;
 import notification.RegistrationIntentService;
 

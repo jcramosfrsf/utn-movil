@@ -29,7 +29,7 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
-import gcm.play.android.samples.com.gcmquickstart.R;
+import com.tomasguti.utnmovil.R;
 
 public class RegistrationIntentService extends IntentService {
 

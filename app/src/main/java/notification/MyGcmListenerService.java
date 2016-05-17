@@ -29,7 +29,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import activities.MainActivity;
-import gcm.play.android.samples.com.gcmquickstart.R;
+import com.tomasguti.utnmovil.R;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -85,7 +85,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setSmallIcon(R.drawable.ic_stat_utn)
                 .setContentTitle("UTN Móvil")
                 .setContentText(message)
                 .setAutoCancel(true)
