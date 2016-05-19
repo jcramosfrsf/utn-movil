@@ -26,15 +26,23 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.tomasguti.utnmovil.R;
 
+import org.json.JSONArray;
+
 import notification.QuickstartPreferences;
 import notification.RegistrationIntentService;
+import utils.RequestQuery;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,6 +85,35 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+    }
+
+    public void clickButton(View view){
+        String url ="http://192.168.0.100:8888/news";
+        JSONArray channels = new JSONArray();
+        channels.put("global");
+
+        JsonArrayRequest mJsonRequest = new JsonArrayRequest(Request.Method.POST, url, channels,
+                new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // here you can parse response and use accordingly
+                        if(response != null){
+                            Log.d("onResponse", response.toString());
+                        }else{
+                            Log.d("onResponse", "null response");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // here you will receive errors and show proper message according to error type
+                Log.d("error", error.getMessage());
+            }
+        });
+
+        RequestQuery.getInstance(this).addToRequestQueue(mJsonRequest);
     }
 
     @Override
