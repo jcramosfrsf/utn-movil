@@ -4,23 +4,6 @@
     android:background="@drawable/background_gradient"
     android:orientation="vertical" tools:context="activities.MainActivity">
 
-    <TextView android:text="@string/registering_message" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/informationTextView"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp" />
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/registrationProgressBar"
-        android:layout_gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -28,8 +11,29 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
         android:layout_alignWithParentIfMissing="false"
-        android:background="#ffffff"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:background="#ffffff">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/utnlogo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/registrationProgressBar"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="10dp" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -41,15 +45,59 @@
             android:src="@drawable/ic_more_vert_black_24dp"
             android:background="#00ffffff"
             android:layout_marginRight="10dp" />
+
     </RelativeLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_above="@+id/registrationProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Noticias"
+        android:id="@+id/newsButton"
+        android:onClick="clickButton"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_above="@+id/calendarButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Calendario"
+        android:id="@+id/calendarButton"
+        android:onClick="clickButton"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:onClick="clickButton" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Horarios y Aulas"
+        android:id="@+id/dcButton"
+        android:onClick="clickButton"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_below="@+id/calendarButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shadow_gradient"></LinearLayout>
 
 </RelativeLayout>

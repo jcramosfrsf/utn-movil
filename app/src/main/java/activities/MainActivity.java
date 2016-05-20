@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
     private boolean isReceiverRegistered;
 
     @Override
@@ -69,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 boolean sentToken = sharedPreferences
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
-                    mInformationTextView.setText(getString(R.string.gcm_send_message));
+                    //mInformationTextView.setText(getString(R.string.gcm_send_message));
                 } else {
-                    mInformationTextView.setText(getString(R.string.token_error_message));
+                    //mInformationTextView.setText(getString(R.string.token_error_message));
                 }
             }
         };
-        mInformationTextView = (TextView) findViewById(R.id.informationTextView);
+        //mInformationTextView = (TextView) findViewById(R.id.informationTextView);
 
         // Registering BroadcastReceiver
         registerReceiver();
@@ -88,16 +87,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButton(View view){
-        String url ="http://192.168.0.100:8888/news";
+
+    }
+
+    public void getNews(int offset){
+        String url = R.string.server_url+"/news";
         JSONArray channels = new JSONArray();
         channels.put("global");
 
         JsonArrayRequest mJsonRequest = new JsonArrayRequest(Request.Method.POST, url, channels,
                 new Response.Listener<JSONArray>() {
-
                     @Override
                     public void onResponse(JSONArray response) {
-                        // here you can parse response and use accordingly
                         if(response != null){
                             Log.d("onResponse", response.toString());
                         }else{
@@ -105,11 +106,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
-                // here you will receive errors and show proper message according to error type
-                Log.d("error", error.getMessage());
+                Log.d("Error", error.getMessage());
             }
         });
 

@@ -9,10 +9,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+
 /**
  * Created by Tomás on 17/05/2016.
  */
 public class RequestQuery {
+    private static String BASE_URL = "";
     private static RequestQuery mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
