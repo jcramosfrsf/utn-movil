@@ -40,6 +40,7 @@ import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
 
+import activities.news.NewsActivity;
 import notification.QuickstartPreferences;
 import notification.RegistrationIntentService;
 import utils.RequestQuery;
@@ -87,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButton(View view){
-
+        Intent myIntent = new Intent(this, NewsActivity.class);
+        startActivity(myIntent);
+        //disable button?
     }
 
     public void getNews(int offset){
