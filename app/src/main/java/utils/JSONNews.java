@@ -22,8 +22,28 @@ public class JSONNews extends JSONArray{
                 "}," +
                 "{" +
                     "title:'Título Noticia 3'," +
-                    "body:'Cuerpo de la tercera noticia'," +
-                    "author:'ASD'"+
+                    "body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'," +
+                    "author:'AUTHOR'"+
+                "}," +
+                "{" +
+                    "title:'Título Noticia 4'," +
+                    "body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'," +
+                    "author:'AUTHOR'"+
+                "}," +
+                "{" +
+                "title:'Título Noticia 5'," +
+                "body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'," +
+                "author:'AUTHOR'"+
+                "}," +
+                "{" +
+                "title:'Título Noticia 6'," +
+                "body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'," +
+                "author:'AUTHOR'"+
+                "}," +
+                "{" +
+                "title:'Título Noticia 7'," +
+                "body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'," +
+                "author:'AUTHOR'"+
                 "}" +
             "]";
 

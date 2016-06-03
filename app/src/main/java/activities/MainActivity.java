@@ -40,6 +40,7 @@ import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
 
+import activities.calendar.CalendarActivity;
 import activities.news.NewsActivity;
 import notification.QuickstartPreferences;
 import notification.RegistrationIntentService;
@@ -87,7 +88,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void clickButton(View view){
+    public void clickButtonNews(View view){
+        Intent myIntent = new Intent(this, NewsActivity.class);
+        startActivity(myIntent);
+        //disable button?
+    }
+
+    public void clickButtonCalendar(View view){
+        Intent myIntent = new Intent(this, CalendarActivity.class);
+        startActivity(myIntent);
+        //disable button?
+    }
+
+    public void clickButtonDC(View view){
         Intent myIntent = new Intent(this, NewsActivity.class);
         startActivity(myIntent);
         //disable button?

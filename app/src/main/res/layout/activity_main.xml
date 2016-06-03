@@ -48,56 +48,60 @@
 
     </RelativeLayout>
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Noticias"
-        android:id="@+id/newsButton"
-        android:onClick="clickButton"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_above="@+id/calendarButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Calendario"
-        android:id="@+id/calendarButton"
-        android:onClick="clickButton"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/shadow_gradient"></LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Horarios y Aulas"
-        android:id="@+id/dcButton"
-        android:onClick="clickButton"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_below="@+id/calendarButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Calendario"
+            android:id="@+id/calendarButton"
+            android:onClick="clickButtonCalendar"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/shadow_gradient"></LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Noticias"
+            android:id="@+id/newsButton"
+            android:onClick="clickButtonNews"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:layout_above="@+id/calendarButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Horarios y Aulas"
+            android:id="@+id/dcButton"
+            android:onClick="clickButtonDC"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:layout_below="@+id/calendarButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

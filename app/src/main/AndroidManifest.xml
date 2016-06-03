@@ -57,9 +57,10 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="notification.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
-        <activity android:name="activities.news.NewsActivity"></activity>
+        <activity android:name="activities.news.NewsActivity" />
+        <activity android:name="activities.calendar.CalendarActivity"></activity>
     </application>
 
 </manifest>
