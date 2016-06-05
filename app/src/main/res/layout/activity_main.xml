@@ -2,7 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    android:orientation="vertical" tools:context="activities.MainActivity">
+    android:orientation="vertical" tools:context="activities.MainActivity"
+    android:id="@+id/mainContainer">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/menuPopupAnchor"></FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -11,7 +20,7 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
         android:layout_alignWithParentIfMissing="false"
-        android:id="@+id/relativeLayout"
+        android:id="@+id/actionBar"
         android:background="#ffffff">
 
         <ImageView
@@ -44,14 +53,15 @@
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_more_vert_black_24dp"
             android:background="#00ffffff"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:onClick="showPopup" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/relativeLayout">
+        android:layout_below="@+id/actionBar">
 
         <LinearLayout
             android:orientation="vertical"
@@ -71,7 +81,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textAllCaps="false" />
 
         <Button
             android:layout_width="match_parent"
@@ -86,7 +97,8 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textAllCaps="false" />
 
         <Button
             android:layout_width="match_parent"
@@ -101,7 +113,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:textAllCaps="false" />
     </RelativeLayout>
 
 </RelativeLayout>
