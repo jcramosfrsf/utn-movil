@@ -10,8 +10,10 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/menuPopupAnchor"></FrameLayout>
+        android:layout_alignParentEnd="false"
+        android:id="@+id/menuPopupAnchor"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="3dp"></FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +23,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignWithParentIfMissing="false"
         android:id="@+id/actionBar"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:layout_alignParentEnd="false">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -66,7 +69,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="5dp"
             android:background="@drawable/shadow_gradient"></LinearLayout>
 
         <Button

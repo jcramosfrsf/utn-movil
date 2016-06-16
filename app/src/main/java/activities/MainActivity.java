@@ -28,10 +28,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,6 +44,7 @@ import com.tomasguti.utnmovil.R;
 import org.json.JSONArray;
 
 import activities.calendar.CalendarActivity;
+import activities.channels.ChannelsActivity;
 import activities.news.NewsActivity;
 import notification.QuickstartPreferences;
 import notification.RegistrationIntentService;
@@ -93,10 +94,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopup(View view) {
         View anchor = findViewById(R.id.menuPopupAnchor);
-        PopupMenu popup = new PopupMenu(this, anchor);
+        PopupMenu popup = new PopupMenu(this, anchor, Gravity.END);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return menuListener(item);
+            }
+        });
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.popup_menu, popup.getMenu());
         popup.show();
+    }
+
+    public boolean menuListener(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.customize:
+                Intent myIntent = new Intent(this, ChannelsActivity.class);
+                startActivity(myIntent);
+                break;
+            case R.id.about:
+
+                break;
+        }
+        return true;
     }
 
     public void clickButtonNews(View view){
@@ -112,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButtonDC(View view){
-        Intent myIntent = new Intent(this, NewsActivity.class);
+        Intent myIntent = new Intent(this, ChannelsActivity.class);
         startActivity(myIntent);
         //disable button?
     }

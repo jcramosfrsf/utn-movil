@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Noticias"
-        android:id="@+id/title"
+        android:id="@+id/nombre"
         android:layout_gravity="center_horizontal"
         android:textColor="#000000"
         android:textSize="30dp"
