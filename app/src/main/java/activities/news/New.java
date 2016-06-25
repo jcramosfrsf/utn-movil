@@ -11,16 +11,22 @@ import java.util.ArrayList;
  */
 public class New {
 
-    public String author;
-    public String title;
-    public String body;
+    public String autor;
+    public String canal;
+    public String titulo;
+    public String cuerpo;
+    public String fecha;
+    public String imagen;
 
     // Constructor to convert JSON object into a Java class instance
     public New(JSONObject object){
         try {
-            this.author = object.getString("author");
-            this.title = object.getString("title");
-            this.body = object.getString("body");
+            this.autor = object.getString("autor");
+            this.canal = object.getString("canal");
+            this.titulo = object.getString("titulo");
+            this.cuerpo = object.getString("cuerpo");
+            this.fecha = object.getString("fecha");
+            this.imagen = object.getString("imagen");
         } catch (JSONException e) {
             e.printStackTrace();
         }

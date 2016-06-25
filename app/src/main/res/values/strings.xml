@@ -1,5 +1,5 @@
 <resources>
-    <string name="server_url">http://192.168.0.100:8888</string>
+    <string name="server_url">http://104.197.204.211:3000</string>
     <string name="app_name">UTN Móvil</string>
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
