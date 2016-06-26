@@ -1,5 +1,7 @@
 package activities.channels;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,10 @@ import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import utils.RequestQuery;
 
 public class ChannelsActivity extends AppCompatActivity {
@@ -32,21 +38,56 @@ public class ChannelsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channels);
+
+        channelsList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.listView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
         fetchChannels();
+    }
+
+    @Override
+    protected void onStop(){
+        savePreferences();
+        super.onStop();
+    }
+
+    private void savePreferences(){
+        if(channelsList.size() > 0) {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sp.edit();
+            Set<String> set = new HashSet<>();
+            for (Channel channel : channelsList) {
+                if (channel.activo) {
+                    set.add(channel._id);
+                }
+            }
+            editor.putStringSet("channels", set);
+            editor.commit();
+        }
+    }
+
+    private List<String> loadPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> set = sp.getStringSet("channels", null);
+        List<String> list = new ArrayList<>();
+        if(set != null){
+            list.addAll(set);
+        }
+        return list;
     }
 
     private void updateListView(){
         adapter = new ChannelsAdapter(this, channelsList);
-        // Attach the adapter to a ListView
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
         progressBar.setVisibility(View.GONE);
     }
 
     private void fetchChannels() {
+
+        final List<String> savedChannels = loadPreferences();
 
         String url = getResources().getString(R.string.server_url) + "/getChannels";
 
@@ -57,6 +98,11 @@ public class ChannelsActivity extends AppCompatActivity {
                         Log.d(TAG, response.toString());
                         if (response.length() > 0) {
                             channelsList = Channel.fromJson(response);
+                            for(Channel channel : channelsList){
+                                if(savedChannels.contains(channel._id)){
+                                    channel.activo = true;
+                                }
+                            }
                             updateListView();
                         }
                     }

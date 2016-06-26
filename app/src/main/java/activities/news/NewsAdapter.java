@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tomasguti.utnmovil.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -37,8 +38,10 @@ public class NewsAdapter extends ArrayAdapter<New> {
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
 
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String date = df.format(newItem.fecha);
         // Populate the data into the template view using the data object
-        author.setText(newItem.autor);
+        author.setText(newItem.autor + " - " + date);
         title.setText(newItem.titulo);
 
         String shortBodyString = newItem.cuerpo;

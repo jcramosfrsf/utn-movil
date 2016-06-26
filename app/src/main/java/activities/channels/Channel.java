@@ -14,9 +14,11 @@ public class Channel {
     public String _id;
     public String nombre;
     public String desc;
+    public boolean activo;
 
     // Constructor to convert JSON object into a Java class instance
     public Channel(JSONObject object){
+        activo = false;
         try {
             this._id = object.getString("_id");
             this.nombre = object.getString("nombre");

@@ -1,5 +1,7 @@
 package activities.news;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -17,6 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import utils.JSONStubs;
 import utils.RequestQuery;
 
@@ -76,10 +84,19 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setRefreshing(true);
 
         // appending offset to url
-        String url = getResources().getString(R.string.server_url) + "/getNews?offset=" + offSet;
+        String url = getResources().getString(R.string.server_url) + "/getNewsByChannels?offset=" + offSet;
 
+        List<String> channels = loadPreferences();
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray(channels);
+        try {
+            json.put("canales", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String jsonString = json.toString();
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(url,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonString,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -120,10 +137,29 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                 // stopping swipe refresh
                 swipeRefreshLayout.setRefreshing(false);
             }
-        });
+        })/*{
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<>();
+                //Log.d(TAG, json.toString());
+                params.put("canales", "['sistemas']");
+                return params;
+            }
+        }*/;
 
         // Adding request to request queue
         RequestQuery.getInstance(this).addToRequestQueue(req);
+    }
+
+    private List<String> loadPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> set = sp.getStringSet("channels", null);
+        List<String> list = new ArrayList<>();
+        if(set != null){
+            list.addAll(set);
+        }
+        return list;
     }
 
 
