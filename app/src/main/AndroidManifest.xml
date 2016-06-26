@@ -65,7 +65,8 @@
 
         <activity android:name="activities.news.NewsActivity" />
         <activity android:name="activities.calendar.CalendarActivity" />
-        <activity android:name="activities.channels.ChannelsActivity"></activity>
+        <activity android:name="activities.channels.ChannelsActivity" />
+        <activity android:name="activities.news.NewFull"></activity>
     </application>
 
 </manifest>

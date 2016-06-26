@@ -1,11 +1,11 @@
 package activities.news;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +36,13 @@ public class NewsAdapter extends ArrayAdapter<New> {
         TextView title = (TextView) convertView.findViewById(R.id.nombre);
         TextView body = (TextView) convertView.findViewById(R.id.body);
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+        int charsLimit = 180;
+        if(newItem.imagen != "null"){
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+            imageView.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(newItem.imagen).into(imageView);
+            charsLimit = 128;
+        }
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String date = df.format(newItem.fecha);
@@ -45,14 +51,10 @@ public class NewsAdapter extends ArrayAdapter<New> {
         title.setText(newItem.titulo);
 
         String shortBodyString = newItem.cuerpo;
-        if(shortBodyString.length() > 140){
-            shortBodyString = shortBodyString.substring(0, 140) + "...";
+        if(shortBodyString.length() > charsLimit){
+            shortBodyString = shortBodyString.substring(0, charsLimit) + "...";
         }
         body.setText(shortBodyString);
-
-        if(newItem.imagen != null){
-            Picasso.with(getContext()).load(newItem.imagen).into(imageView);
-        }
 
         // Return the completed view to render on screen
         return convertView;

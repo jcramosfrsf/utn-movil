@@ -1,11 +1,14 @@
 package activities.news;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -50,6 +53,18 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         newsList = new ArrayList<>();
         adapter = new NewsAdapter(this, newsList);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                New noticia = newsList.get(position);
+                Intent intent = new Intent(getBaseContext(), NewFull.class);
+                intent.putExtra("noticia", noticia);
+                startActivity(intent);
+            }
+        });
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -101,53 +116,32 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
-
                         if (response.length() > 0) {
-
                             // looping through json and adding to movies list
                             for (int i = 0; i < response.length(); i++) {
                                 try {
                                     JSONObject newObj = response.getJSONObject(i);
-
                                     New m = new New(newObj);
-
                                     newsList.add(0, m);
-
                                     offSet = newsList.size();
-
                                 } catch (JSONException e) {
                                     Log.e(TAG, "JSON Parsing error: " + e.getMessage());
                                 }
                             }
-
                             adapter.notifyDataSetChanged();
                         }
-
                         // stopping swipe refresh
                         swipeRefreshLayout.setRefreshing(false);
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Log.e(TAG, "Server Error: " + error.getMessage());
-
                 Toast.makeText(getApplicationContext(), "Error actualizando las noticias.", Toast.LENGTH_LONG).show();
-
                 // stopping swipe refresh
                 swipeRefreshLayout.setRefreshing(false);
             }
-        })/*{
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String>  params = new HashMap<>();
-                //Log.d(TAG, json.toString());
-                params.put("canales", "['sistemas']");
-                return params;
-            }
-        }*/;
-
+        });
         // Adding request to request queue
         RequestQuery.getInstance(this).addToRequestQueue(req);
     }
@@ -161,6 +155,5 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
         return list;
     }
-
 
 }

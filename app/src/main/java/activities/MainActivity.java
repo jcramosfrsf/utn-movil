@@ -137,31 +137,6 @@ public class MainActivity extends AppCompatActivity {
         //disable button?
     }
 
-    public void getNews(int offset){
-        String url = R.string.server_url+"/news";
-        JSONArray channels = new JSONArray();
-        channels.put("global");
-
-        JsonArrayRequest mJsonRequest = new JsonArrayRequest(Request.Method.POST, url, channels,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        if(response != null){
-                            Log.d("onResponse", response.toString());
-                        }else{
-                            Log.d("onResponse", "null response");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error", error.getMessage());
-            }
-        });
-
-        RequestQuery.getInstance(this).addToRequestQueue(mJsonRequest);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
