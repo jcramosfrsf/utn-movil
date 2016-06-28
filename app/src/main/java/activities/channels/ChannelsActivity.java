@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
@@ -61,6 +62,9 @@ public class ChannelsActivity extends AppCompatActivity {
             for (Channel channel : channelsList) {
                 if (channel.activo) {
                     set.add(channel._id);
+                    FirebaseMessaging.getInstance().subscribeToTopic(channel._id);
+                }else{
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(channel._id);
                 }
             }
             editor.putStringSet("channels", set);

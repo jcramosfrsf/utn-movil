@@ -37,11 +37,13 @@ public class NewsAdapter extends ArrayAdapter<New> {
         TextView body = (TextView) convertView.findViewById(R.id.body);
 
         int charsLimit = 180;
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
         if(newItem.imagen != "null"){
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
             imageView.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(newItem.imagen).into(imageView);
             charsLimit = 128;
+        }else{
+            imageView.setVisibility(View.GONE);
         }
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");

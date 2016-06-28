@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tomasguti.utnmovil">
+    package="com.tomasguti.utnmovil" >
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- [END gcm_permission] -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="activities.splash.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,46 +25,26 @@
             android:name="activities.MainActivity"
             android:label="@string/app_name" />
 
-        <!-- [START gcm_receiver] -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <!-- [START fcm_listener] -->
+        <service android:name="notification.MyFcmListenerService" >
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="tomasguti.utnmovil" />
-            </intent-filter>
-        </receiver>
-        <!-- [END gcm_receiver] -->
-
-
-        <!-- [START gcm_listener] -->
-        <service
-            android:name="notification.MyGcmListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END gcm_listener] -->
+        <!-- [END fcm_listener] -->
+
+
         <!-- [START instanceId_listener] -->
-        <service
-            android:name="notification.MyInstanceIDListenerService"
-            android:exported="false">
+        <service android:name="notification.MyInstanceIDListenerService" >
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END instanceId_listener] -->
-        <service
-            android:name="notification.RegistrationIntentService"
-            android:exported="false" />
-
         <activity android:name="activities.news.NewsActivity" />
         <activity android:name="activities.calendar.CalendarActivity" />
         <activity android:name="activities.channels.ChannelsActivity" />
-        <activity android:name="activities.news.NewFull"></activity>
+        <activity android:name="activities.news.NewFull" />
     </application>
 
 </manifest>
