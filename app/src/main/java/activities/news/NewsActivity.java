@@ -99,17 +99,18 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setRefreshing(true);
 
         // appending offset to url
-        String url = getResources().getString(R.string.server_url) + "/getNewsByChannels?offset=" + offSet;
+        String url = getResources().getString(R.string.server_url) + "/getNews?offset=" + offSet;
 
         List<String> channels = loadPreferences();
         JSONObject json = new JSONObject();
         JSONArray jsonArray = new JSONArray(channels);
         try {
-            json.put("canales", jsonArray);
+            json.put("channels", jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String jsonString = json.toString();
+        Log.d(TAG, jsonString);
         // Volley's json array request object
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonString,
                 new Response.Listener<JSONArray>() {

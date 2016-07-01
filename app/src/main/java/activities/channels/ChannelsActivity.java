@@ -72,7 +72,7 @@ public class ChannelsActivity extends AppCompatActivity {
         }
     }
 
-    private List<String> loadPreferences(){
+    public List<String> loadPreferences(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> set = sp.getStringSet("channels", null);
         List<String> list = new ArrayList<>();

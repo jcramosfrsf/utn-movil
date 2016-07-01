@@ -38,7 +38,7 @@ public class NewsAdapter extends ArrayAdapter<New> {
 
         int charsLimit = 180;
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-        if(newItem.imagen != "null"){
+        if(!newItem.imagen.isEmpty()){
             imageView.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(newItem.imagen).into(imageView);
             charsLimit = 128;

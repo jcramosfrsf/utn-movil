@@ -2,6 +2,7 @@ package activities.news;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +36,9 @@ public class New implements Parcelable {
             this.cuerpo = object.getString("cuerpo");
             this.imagen = object.getString("imagen");
             String stringFecha = object.getString("fecha");
-            DateFormat df = new SimpleDateFormat("EEE MMM dd yyyy kk:mm:ss z", Locale.ENGLISH);
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSS'Z'");
             fecha =  df.parse(stringFecha);
+            Log.d("Date", fecha.toString());
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
