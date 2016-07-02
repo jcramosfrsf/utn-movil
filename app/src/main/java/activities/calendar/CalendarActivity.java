@@ -1,14 +1,14 @@
 package activities.calendar;
 
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,10 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,12 @@ public class CalendarActivity extends AppCompatActivity {
 
     //private ListView listView;
     //private NewsAdapter adapter;
+    private EventsListAdapter eventsListAdapter;
+    private ArrayList<CalendarEvent> dayEventsList; //For the adapter
     private ArrayList<CalendarEvent> eventsList;
+    private ListView eventsListView;
+    private View eventsFull;
+    private TextView eventsFullDate;
     private CaldroidFragment caldroidFragment;
     Calendar cal;
     private String jsonChannelsString;
@@ -71,7 +76,6 @@ public class CalendarActivity extends AppCompatActivity {
         args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
         args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
 
-        //caldroidFragment.setTextColorForDate(Color.BLUE, cal.getTime());
         caldroidFragment.setArguments(args);
         caldroidFragment.setTextColorForDate(R.color.currentDateColor, cal.getTime());
 
@@ -79,13 +83,47 @@ public class CalendarActivity extends AppCompatActivity {
         t.replace(R.id.calendarView, caldroidFragment);
         t.commit();
 
+        //Setups Day Popup Adapter
+        eventsFull = (View) findViewById(R.id.eventsFull);
+        eventsFullDate = (TextView) findViewById(R.id.date);
+        eventsListView = (ListView) findViewById(R.id.eventsListView);
+        dayEventsList = new ArrayList<>();
+        eventsListAdapter = new EventsListAdapter(this, dayEventsList);
+        eventsListView.setAdapter(eventsListAdapter);
+
         // Setup listener
         final CaldroidListener listener = new CaldroidListener() {
 
             @Override
             public void onSelectDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(), date.toString(),
-                        Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_SHORT).show();
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int selectedDay = calendar.get(Calendar.DAY_OF_MONTH);
+                int selectedMonth = calendar.get(Calendar.MONTH);
+
+                dayEventsList = new ArrayList<>();
+                for(CalendarEvent event : eventsList){
+                    calendar.setTime(event.fecha);
+                    int arrayDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    int arrayMonth = calendar.get(Calendar.MONTH);
+                    if(selectedDay == arrayDay && selectedMonth == arrayMonth){
+                        dayEventsList.add(event);
+                    }
+                }
+               if(dayEventsList.size() > 0){
+                   SimpleDateFormat df = new SimpleDateFormat("EEEE dd 'de' MMMMMMMMM 'de' yyyy");
+                   String fullDateString = df.format(date);
+                   String upperCaseFullDate = fullDateString.substring(0, 1).toUpperCase() + fullDateString.substring(1);
+                   eventsFullDate.setText(upperCaseFullDate);
+                   eventsListAdapter = new EventsListAdapter(getApplicationContext(), dayEventsList);
+                   eventsListView.setAdapter(eventsListAdapter);
+                   eventsFull.setVisibility(View.VISIBLE);
+               }else{
+                   eventsFull.setVisibility(View.INVISIBLE);
+               }
+
             }
 
             @Override
@@ -96,25 +134,26 @@ public class CalendarActivity extends AppCompatActivity {
                 caldroidFragment.refreshView();
                 fetchEvents(month, year);
             }
-
+            /*
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(), "LONG"+date.toString(),
+                Toast.makeText(getApplicationContext(), date.toString(),
                         Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCaldroidViewCreated() {
-                /*
-                int month = caldroidFragment.getMonth();
-                int year = caldroidFragment.getYear();
-                fetchEvents(month, year);*/
-            }
 
+            }
+            */
         };
 
         // Setup Caldroid
         caldroidFragment.setCaldroidListener(listener);
+    }
+
+    public void hideEventsFull(View v){
+        eventsFull.setVisibility(View.INVISIBLE);
     }
 
     public List<String> loadPreferences(){
@@ -172,9 +211,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
-
         if (caldroidFragment != null) {
             caldroidFragment.saveStatesToKey(outState, "CALDROID_SAVED_STATE");
         }

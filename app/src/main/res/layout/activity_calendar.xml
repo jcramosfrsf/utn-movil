@@ -3,12 +3,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="activities.calendar.CalendarActivity"
     android:background="#ffffff"
-    android:id="@+id/calendarView">
+    android:id="@+id/relativeLayout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/calendarView"
+        android:layout_margin="@dimen/activity_vertical_margin">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/eventsFull"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/container"
+            android:background="@drawable/shadow_container"
+            android:visibility="visible"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lunes 16 de Junio de 2016"
+                android:id="@+id/date"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_above="@+id/view"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_toLeftOf="@+id/closeButton"
+                android:layout_toStartOf="@+id/closeButton" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/closeButton"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:onClick="hideEventsFull"
+                android:visibility="visible"
+                android:layout_margin="5dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/closeButton"
+                android:id="@+id/view" />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eventsListView"
+                android:dividerHeight="1dp"
+                android:divider="@android:color/darker_gray"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/view"
+                android:layout_below="@+id/view" />
+
+        </RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

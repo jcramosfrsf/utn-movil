@@ -41,8 +41,22 @@
             </intent-filter>
         </service>
         <!-- [END instanceId_listener] -->
-        <activity android:name="activities.news.NewsActivity" />
-        <activity android:name="activities.calendar.CalendarActivity" />
+        <activity android:name="activities.news.NewsActivity"
+            android:label="Noticias"
+            android:parentActivityName="activities.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activities.MainActivity" />
+        </activity>
+        <activity android:name="activities.calendar.CalendarActivity"
+            android:label="Calendario"
+            android:parentActivityName="activities.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activities.MainActivity" />
+        </activity>
         <activity android:name="activities.channels.ChannelsActivity" />
         <activity android:name="activities.news.NewFull" />
     </application>

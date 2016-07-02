@@ -32,7 +32,7 @@ public class ChannelsAdapter extends ArrayAdapter<Channel> {
         }
         // Lookup view for data population
 
-        TextView nombre = (TextView) convertView.findViewById(R.id.nombre);
+        TextView nombre = (TextView) convertView.findViewById(R.id.title);
         TextView desc = (TextView) convertView.findViewById(R.id.desc);
         Switch switch1 = (Switch) convertView.findViewById(R.id.switch1);
 

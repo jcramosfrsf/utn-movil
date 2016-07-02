@@ -28,7 +28,7 @@ public class NewFull extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.title);
         TextView body = (TextView) findViewById(R.id.body);
 
-        if(newItem.imagen != ""){
+        if(!newItem.imagen.isEmpty()){
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             Picasso.with(getApplicationContext()).load(newItem.imagen).into(imageView);
         }

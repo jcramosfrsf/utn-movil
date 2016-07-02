@@ -1,7 +1,6 @@
 package activities.news;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ public class NewsAdapter extends ArrayAdapter<New> {
         }
         // Lookup view for data population
         TextView author = (TextView) convertView.findViewById(R.id.author);
-        TextView title = (TextView) convertView.findViewById(R.id.nombre);
+        TextView title = (TextView) convertView.findViewById(R.id.title);
         TextView body = (TextView) convertView.findViewById(R.id.body);
 
         int charsLimit = 180;
