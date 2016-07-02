@@ -1,10 +1,10 @@
 package activities.calendar;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,10 +26,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import activities.news.New;
 import utils.RequestQuery;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -41,25 +43,37 @@ public class CalendarActivity extends AppCompatActivity {
     private ArrayList<CalendarEvent> eventsList;
     private CaldroidFragment caldroidFragment;
     Calendar cal;
+    private String jsonChannelsString;
+    Map<Integer, Integer> eventsMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        caldroidFragment = new CaldroidFragment();
+        List<String> channels = loadPreferences();
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray(channels);
+        try {
+            json.put("channels", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonChannelsString = json.toString();
+
+        caldroidFragment = new CustomCalendar();
         cal = Calendar.getInstance();
         Bundle args = new Bundle();
 
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultDark);
+        args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
         args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
 
-        //current date blue
-        ColorDrawable blue = new ColorDrawable(Color.BLUE);
-        caldroidFragment.setBackgroundDrawableForDate(blue, cal.getTime());
+        //caldroidFragment.setTextColorForDate(Color.BLUE, cal.getTime());
         caldroidFragment.setArguments(args);
+        caldroidFragment.setTextColorForDate(R.color.currentDateColor, cal.getTime());
 
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.replace(R.id.calendarView, caldroidFragment);
@@ -76,6 +90,10 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onChangeMonth(int month, int year) {
+                eventsMap = new HashMap<>();
+                Map<String, Object> extraData = caldroidFragment.getExtraData();
+                extraData.put("EVENTS", eventsMap);
+                caldroidFragment.refreshView();
                 fetchEvents(month, year);
             }
 
@@ -113,28 +131,29 @@ public class CalendarActivity extends AppCompatActivity {
 
         int javaMonth = month - 1;
         String url = getResources().getString(R.string.server_url) + "/getEvents?month="+javaMonth+"&year="+year;
-        Log.d(TAG, url);
+        //Log.d(TAG, url);
 
-        List<String> channels = loadPreferences();
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray(channels);
-        try {
-            json.put("channels", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String jsonString = json.toString();
-        Log.d(TAG, jsonString);
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonString,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannelsString,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
                         if (response.length() > 0) {
-                            //eventsList = CalendarEvent.fromJson(response);
-                            //Log.d(TAG, );
-                            //adapter.notifyDataSetChanged();
+                            eventsList = CalendarEvent.fromJson(response);
+                            Calendar calendar = Calendar.getInstance();
+                            for(CalendarEvent event : eventsList){
+                                calendar.setTime(event.fecha);
+                                int dayIndex = calendar.get(Calendar.DAY_OF_MONTH);
+                                if (eventsMap.containsKey(dayIndex)) {
+                                    eventsMap.put(dayIndex, eventsMap.get(dayIndex)+1);
+                                }else{
+                                    eventsMap.put(dayIndex, 1);
+                                }
+                            }
+                            Map<String, Object> extraData = caldroidFragment.getExtraData();
+                            extraData.put("EVENTS", eventsMap);
+                            caldroidFragment.refreshView();
                         }
                     }
                 }, new Response.ErrorListener() {

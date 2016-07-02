@@ -38,7 +38,6 @@ public class New implements Parcelable {
             String stringFecha = object.getString("fecha");
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSS'Z'");
             fecha =  df.parse(stringFecha);
-            Log.d("Date", fecha.toString());
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
