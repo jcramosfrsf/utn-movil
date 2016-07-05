@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,12 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import utils.JSONStubs;
+import activities.channels.ChannelsActivity;
 import utils.RequestQuery;
 
 public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -41,6 +42,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     private ListView listView;
     private NewsAdapter adapter;
     private ArrayList<New> newsList;
+    private String jsonChannels;
 
     private int offSet = 0;
 
@@ -51,10 +53,8 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -77,25 +77,56 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
 
         swipeRefreshLayout.setOnRefreshListener(this);
+    }
 
+    @Override
+    public void onResume(){
         /**
          * Showing Swipe Refresh animation on activity create
          * As animation won't start on onCreate, post runnable is used
          */
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-
-                                        fetchNews();
+        boolean someChannel = loadChannels();
+        if(!someChannel){
+            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
+                    Toast.LENGTH_LONG).show();
+            offSet = 0;
+            newsList = new ArrayList<>();
+            adapter = new NewsAdapter(this, newsList);
+            listView.setAdapter(adapter);
+            //swipeRefreshLayout.setRefreshing(false);
+        }else{
+            swipeRefreshLayout.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            swipeRefreshLayout.setRefreshing(true);
+                                            fetchNews();
+                                        }
                                     }
-                                }
-        );
+            );
+        }
 
-        //JSONArray jsonNews = JSONStubs.getNews();
+        super.onResume();
+    }
 
-        //ArrayList<New> news = New.fromJson(jsonNews);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.channels_settings:
+                Intent myIntent = new Intent(this, ChannelsActivity.class);
+                startActivity(myIntent);
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news_menu, menu);
+        return true;
     }
 
     @Override
@@ -111,18 +142,8 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         // appending offset to url
         String url = getResources().getString(R.string.server_url) + "/getNews?offset=" + offSet;
 
-        List<String> channels = loadPreferences();
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray(channels);
-        try {
-            json.put("channels", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String jsonString = json.toString();
-        Log.d(TAG, jsonString);
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonString,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannels,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -155,6 +176,24 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
         // Adding request to request queue
         RequestQuery.getInstance(this).addToRequestQueue(req);
+    }
+
+    private boolean loadChannels(){
+        List<String> channels = loadPreferences();
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray(channels);
+        try {
+            json.put("channels", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonChannels = json.toString();
+
+        if(channels.isEmpty()){
+            return false;
+        }
+
+        return true;
     }
 
     private List<String> loadPreferences(){

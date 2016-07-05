@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.tomasguti.utnmovil.R;
@@ -41,33 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void showPopup(View view) {
-        View anchor = findViewById(R.id.menuPopupAnchor);
-        PopupMenu popup = new PopupMenu(this, anchor);
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return menuListener(item);
-            }
-        });
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popup.getMenu());
-        popup.show();
-    }
-
-    public boolean menuListener(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.customize:
-                Intent myIntent = new Intent(this, ChannelsActivity.class);
-                startActivity(myIntent);
-                break;
-            case R.id.about:
-
-                break;
-        }
-        return true;
-    }
-
     public void clickButtonNews(View view){
         Intent myIntent = new Intent(this, NewsActivity.class);
         startActivity(myIntent);
@@ -81,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButtonDC(View view){
-        Intent myIntent = new Intent(this, ChannelsActivity.class);
-        startActivity(myIntent);
-        //disable button?
+        Toast.makeText(getApplicationContext(), "En desarrollo...",
+                Toast.LENGTH_SHORT).show();
+        //Intent myIntent = new Intent(this, ChannelsActivity.class);
+        //startActivity(myIntent);
     }
 
 }

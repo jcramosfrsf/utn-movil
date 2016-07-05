@@ -25,7 +25,7 @@
             android:background="@drawable/ic_brightness_1_black_24dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/tv2"
@@ -37,7 +37,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textAlignment="center"
-            android:visibility="invisible" />
+            android:visibility="visible"
+            android:text="9" />
     </RelativeLayout>
 
 </LinearLayout>

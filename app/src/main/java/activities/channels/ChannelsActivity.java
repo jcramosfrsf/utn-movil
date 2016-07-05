@@ -49,9 +49,9 @@ public class ChannelsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop(){
+    protected void onPause(){
         savePreferences();
-        super.onStop();
+        super.onPause();
     }
 
     private void savePreferences(){
@@ -68,7 +68,7 @@ public class ChannelsActivity extends AppCompatActivity {
                 }
             }
             editor.putStringSet("channels", set);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -99,7 +99,7 @@ public class ChannelsActivity extends AppCompatActivity {
         JsonArrayRequest req = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
+                        //Log.d(TAG, response.toString());
                         if (response.length() > 0) {
                             channelsList = Channel.fromJson(response);
                             for(Channel channel : channelsList){

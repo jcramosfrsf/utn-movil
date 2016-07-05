@@ -3,15 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="activities.calendar.CalendarActivity"
     android:background="#ffffff"
     android:id="@+id/relativeLayout">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/calendarView"
-        android:layout_margin="@dimen/activity_vertical_margin">
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_centerHorizontal="true">
 
     </RelativeLayout>
 
@@ -19,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/eventsFull"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_below="@+id/my_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,9 +41,11 @@
             android:id="@+id/container"
             android:background="@drawable/shadow_container"
             android:visibility="visible"
-            android:layout_margin="@dimen/activity_vertical_margin"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <TextView
                 android:layout_width="wrap_content"

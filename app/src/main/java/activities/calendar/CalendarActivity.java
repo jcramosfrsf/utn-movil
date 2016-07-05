@@ -1,11 +1,17 @@
 package activities.calendar;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,14 +38,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import activities.channels.ChannelsActivity;
 import utils.RequestQuery;
 
 public class CalendarActivity extends AppCompatActivity {
 
     public static final String TAG = CalendarActivity.class.getSimpleName();
 
-    //private ListView listView;
-    //private NewsAdapter adapter;
     private EventsListAdapter eventsListAdapter;
     private ArrayList<CalendarEvent> dayEventsList; //For the adapter
     private ArrayList<CalendarEvent> eventsList;
@@ -48,7 +53,7 @@ public class CalendarActivity extends AppCompatActivity {
     private TextView eventsFullDate;
     private CaldroidFragment caldroidFragment;
     Calendar cal;
-    private String jsonChannelsString;
+    private String jsonChannels;
     Map<Integer, Integer> eventsMap;
 
     @Override
@@ -56,15 +61,18 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        List<String> channels = loadPreferences();
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray(channels);
-        try {
-            json.put("channels", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        boolean someChannel = loadChannels();
+        if(!someChannel){
+            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
+                    Toast.LENGTH_LONG).show();
         }
-        jsonChannelsString = json.toString();
 
         caldroidFragment = new CustomCalendar();
         cal = Calendar.getInstance();
@@ -152,18 +160,46 @@ public class CalendarActivity extends AppCompatActivity {
         caldroidFragment.setCaldroidListener(listener);
     }
 
-    public void hideEventsFull(View v){
-        eventsFull.setVisibility(View.INVISIBLE);
+    @Override
+    public void onRestart(){
+        /**
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+        boolean someChannel = loadChannels();
+        if(!someChannel){
+            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
+
+        super.onRestart();
     }
 
-    public List<String> loadPreferences(){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> set = sp.getStringSet("channels", null);
-        List<String> list = new ArrayList<>();
-        if(set != null){
-            list.addAll(set);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.channels_settings:
+                Intent myIntent = new Intent(this, ChannelsActivity.class);
+                startActivity(myIntent);
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
-        return list;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news_menu, menu);
+        return true;
+    }
+
+    public void hideEventsFull(View v){
+        eventsFull.setVisibility(View.INVISIBLE);
     }
 
     private void fetchEvents(int month, int year) {
@@ -173,11 +209,11 @@ public class CalendarActivity extends AppCompatActivity {
         //Log.d(TAG, url);
 
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannelsString,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannels,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
+                        //Log.d(TAG, response.toString());
                         if (response.length() > 0) {
                             eventsList = CalendarEvent.fromJson(response);
                             Calendar calendar = Calendar.getInstance();
@@ -204,6 +240,33 @@ public class CalendarActivity extends AppCompatActivity {
         });
         // Adding request to request queue
         RequestQuery.getInstance(this).addToRequestQueue(req);
+    }
+
+    private boolean loadChannels(){
+        List<String> channels = loadPreferences();
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray(channels);
+        try {
+            json.put("channels", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonChannels = json.toString();
+        if(channels.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private List<String> loadPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> set = sp.getStringSet("channels", null);
+        List<String> list = new ArrayList<>();
+        if(set != null){
+            list.addAll(set);
+        }
+        return list;
     }
 
     /**
