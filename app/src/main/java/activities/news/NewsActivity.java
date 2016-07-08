@@ -42,7 +42,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     private ListView listView;
     private NewsAdapter adapter;
     private ArrayList<New> newsList;
-    private String jsonChannels;
+    private JSONArray jsonChannels;
 
     private int offSet = 0;
 
@@ -64,6 +64,8 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         adapter = new NewsAdapter(this, newsList);
         listView.setAdapter(adapter);
 
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -75,26 +77,18 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                 startActivity(intent);
             }
         });
-
-        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onResume(){
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-        boolean someChannel = loadChannels();
-        if(!someChannel){
-            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
-                    Toast.LENGTH_LONG).show();
-            offSet = 0;
-            newsList = new ArrayList<>();
-            adapter = new NewsAdapter(this, newsList);
-            listView.setAdapter(adapter);
-            //swipeRefreshLayout.setRefreshing(false);
-        }else{
+
+        boolean needUpdate = loadPreferences();
+
+        if(jsonChannels.length() == 0){
+            clearNews();
+            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.", Toast.LENGTH_LONG).show();
+        }else if(needUpdate){
+            clearNews();
             swipeRefreshLayout.post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -106,6 +100,18 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         super.onResume();
+    }
+
+    private void clearNews(){
+        offSet = 0;
+        newsList = new ArrayList<>();
+        adapter = new NewsAdapter(this, newsList);
+        listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onRefresh() {
+        fetchNews();
     }
 
     @Override
@@ -129,21 +135,23 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         return true;
     }
 
-    @Override
-    public void onRefresh() {
-        fetchNews();
-    }
-
     private void fetchNews() {
 
         // showing refresh animation before making http call
         swipeRefreshLayout.setRefreshing(true);
 
+        JSONObject json = new JSONObject();
+        try {
+            json.put("channels", jsonChannels);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         // appending offset to url
         String url = getResources().getString(R.string.server_url) + "/getNews?offset=" + offSet;
 
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannels,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, json.toString(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -178,32 +186,26 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         RequestQuery.getInstance(this).addToRequestQueue(req);
     }
 
-    private boolean loadChannels(){
-        List<String> channels = loadPreferences();
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray(channels);
-        try {
-            json.put("channels", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        jsonChannels = json.toString();
-
-        if(channels.isEmpty()){
-            return false;
-        }
-
-        return true;
-    }
-
-    private List<String> loadPreferences(){
+    private boolean loadPreferences(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> set = sp.getStringSet("channels", null);
+
+        //Consume the update.
+        boolean updatedChannels = sp.getBoolean("updatedChannels", true);
+        if(updatedChannels){
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("updatedChannels", false);
+            editor.apply();
+        }
+
         List<String> list = new ArrayList<>();
         if(set != null){
             list.addAll(set);
         }
-        return list;
+
+        jsonChannels = new JSONArray(list);
+
+        return updatedChannels;
     }
 
 }

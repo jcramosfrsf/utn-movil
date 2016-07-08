@@ -19,6 +19,8 @@ import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +34,7 @@ public class ChannelsActivity extends AppCompatActivity {
     private ListView listView;
     private ChannelsAdapter adapter;
     private ArrayList<Channel> channelsList;
+    private List<String> savedChannels;
 
     private ProgressBar progressBar;
 
@@ -39,6 +42,8 @@ public class ChannelsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channels);
+
+        savedChannels = loadPreferences();
 
         channelsList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.listView);
@@ -67,6 +72,18 @@ public class ChannelsActivity extends AppCompatActivity {
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(channel._id);
                 }
             }
+
+            List<String> list = new ArrayList<>();
+            if(set != null){
+                list.addAll(set);
+            }
+
+            if(compareChannels(list, savedChannels)){
+                editor.putBoolean("updatedChannels", false);
+            }else{
+                editor.putBoolean("updatedChannels", true);
+            }
+
             editor.putStringSet("channels", set);
             editor.apply();
         }
@@ -82,6 +99,10 @@ public class ChannelsActivity extends AppCompatActivity {
         return list;
     }
 
+    public static boolean compareChannels(List<String> arr1, List<String> arr2) {
+        return arr1.containsAll(arr2) && arr2.containsAll(arr1);
+    }
+
     private void updateListView(){
         adapter = new ChannelsAdapter(this, channelsList);
         listView = (ListView) findViewById(R.id.listView);
@@ -90,8 +111,6 @@ public class ChannelsActivity extends AppCompatActivity {
     }
 
     private void fetchChannels() {
-
-        final List<String> savedChannels = loadPreferences();
 
         String url = getResources().getString(R.string.server_url) + "/getChannels";
 
@@ -114,6 +133,7 @@ public class ChannelsActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Log.e(TAG, "Server Error: " + error.getMessage());
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Error actualizando los canales.", Toast.LENGTH_LONG).show();
             }
         });

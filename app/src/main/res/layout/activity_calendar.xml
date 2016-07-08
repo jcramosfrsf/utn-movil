@@ -43,9 +43,7 @@
             android:visibility="visible"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

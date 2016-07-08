@@ -53,7 +53,7 @@ public class CalendarActivity extends AppCompatActivity {
     private TextView eventsFullDate;
     private CaldroidFragment caldroidFragment;
     Calendar cal;
-    private String jsonChannels;
+    private JSONArray jsonChannels;
     Map<Integer, Integer> eventsMap;
 
     @Override
@@ -68,11 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        boolean someChannel = loadChannels();
-        if(!someChannel){
-            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
-                    Toast.LENGTH_LONG).show();
-        }
+        loadPreferences();
 
         caldroidFragment = new CustomCalendar();
         cal = Calendar.getInstance();
@@ -136,10 +132,7 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onChangeMonth(int month, int year) {
-                eventsMap = new HashMap<>();
-                Map<String, Object> extraData = caldroidFragment.getExtraData();
-                extraData.put("EVENTS", eventsMap);
-                caldroidFragment.refreshView();
+                clearEvents();
                 fetchEvents(month, year);
             }
             /*
@@ -161,20 +154,25 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRestart(){
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-        boolean someChannel = loadChannels();
-        if(!someChannel){
-            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.",
-                    Toast.LENGTH_LONG).show();
+    public void onResume(){
+
+        boolean needUpdate = loadPreferences();
+
+        if(jsonChannels.length() == 0){
+            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.", Toast.LENGTH_LONG).show();
+            clearEvents();
+        }else if(needUpdate){
+            caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
         }
 
-        caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
+        super.onResume();
+    }
 
-        super.onRestart();
+    private void clearEvents(){
+        eventsMap = new HashMap<>();
+        Map<String, Object> extraData = caldroidFragment.getExtraData();
+        extraData.put("EVENTS", eventsMap);
+        caldroidFragment.refreshView();
     }
 
     @Override
@@ -206,10 +204,16 @@ public class CalendarActivity extends AppCompatActivity {
 
         int javaMonth = month - 1;
         String url = getResources().getString(R.string.server_url) + "/getEvents?month="+javaMonth+"&year="+year;
-        //Log.d(TAG, url);
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("channels", jsonChannels);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, jsonChannels,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, json.toString(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -242,31 +246,26 @@ public class CalendarActivity extends AppCompatActivity {
         RequestQuery.getInstance(this).addToRequestQueue(req);
     }
 
-    private boolean loadChannels(){
-        List<String> channels = loadPreferences();
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray(channels);
-        try {
-            json.put("channels", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        jsonChannels = json.toString();
-        if(channels.isEmpty()){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    private List<String> loadPreferences(){
+    private boolean loadPreferences(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> set = sp.getStringSet("channels", null);
+
+        //Consume the update.
+        boolean updatedChannels = sp.getBoolean("updatedChannels", true);
+        if(updatedChannels){
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("updatedChannels", false);
+            editor.apply();
+        }
+
         List<String> list = new ArrayList<>();
         if(set != null){
             list.addAll(set);
         }
-        return list;
+
+        jsonChannels = new JSONArray(list);
+
+        return updatedChannels;
     }
 
     /**
