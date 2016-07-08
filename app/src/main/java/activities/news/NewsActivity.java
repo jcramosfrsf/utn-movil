@@ -43,6 +43,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     private NewsAdapter adapter;
     private ArrayList<New> newsList;
     private JSONArray jsonChannels;
+    private boolean firstOnCreate;
 
     private int offSet = 0;
 
@@ -77,6 +78,8 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                 startActivity(intent);
             }
         });
+
+        firstOnCreate = true;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         if(jsonChannels.length() == 0){
             clearNews();
             Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.", Toast.LENGTH_LONG).show();
-        }else if(needUpdate){
+        }else if(needUpdate || firstOnCreate){
             clearNews();
             swipeRefreshLayout.post(new Runnable() {
                                         @Override
@@ -97,6 +100,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                                         }
                                     }
             );
+            firstOnCreate = false;
         }
 
         super.onResume();
@@ -149,6 +153,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         // appending offset to url
         String url = getResources().getString(R.string.server_url) + "/getNews?offset=" + offSet;
+        Log.d(TAG, url);
 
         // Volley's json array request object
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.POST, url, json.toString(),
@@ -191,7 +196,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         Set<String> set = sp.getStringSet("channels", null);
 
         //Consume the update.
-        boolean updatedChannels = sp.getBoolean("updatedChannels", true);
+        boolean updatedChannels = sp.getBoolean("updatedChannels", false);
         if(updatedChannels){
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean("updatedChannels", false);

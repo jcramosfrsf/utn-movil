@@ -204,7 +204,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         int javaMonth = month - 1;
         String url = getResources().getString(R.string.server_url) + "/getEvents?month="+javaMonth+"&year="+year;
-
+        Log.d(TAG, url);
         JSONObject json = new JSONObject();
         try {
             json.put("channels", jsonChannels);
@@ -251,7 +251,7 @@ public class CalendarActivity extends AppCompatActivity {
         Set<String> set = sp.getStringSet("channels", null);
 
         //Consume the update.
-        boolean updatedChannels = sp.getBoolean("updatedChannels", true);
+        boolean updatedChannels = sp.getBoolean("updatedChannels", false);
         if(updatedChannels){
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean("updatedChannels", false);
