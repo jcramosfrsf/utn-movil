@@ -1,5 +1,29 @@
 <resources>
     <string name="server_url">http://104.197.204.211:3000</string>
+    <string name="utn_server_url">http://www.frsf.utn.edu.ar</string>
     <string name="app_name">UTN Móvil</string>
     <string name="channels_settings">Canales</string>
+    <string name="subjects_settings">Materias</string>
+    <string-array name="careers_array">
+        <item>Selecciona una carrera...</item>
+        <item>Ingeniería en Sistemas de Información</item>
+        <item>Ingeniería Industrial</item>
+        <item>Ingeniería Eléctrica</item>
+        <item>Ingeniería Mecánica</item>
+        <item>Ingeniería Civil</item>
+        <item>Tecnicatura Superior en Mecatrónica</item>
+        <item>Institucional</item>
+        <item>Extensión Universitaria</item>
+    </string-array>
+    <string-array name="careers_array_id">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
 </resources>

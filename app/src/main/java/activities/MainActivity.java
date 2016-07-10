@@ -30,6 +30,7 @@ import com.tomasguti.utnmovil.R;
 
 import activities.calendar.CalendarActivity;
 import activities.channels.ChannelsActivity;
+import activities.classrooms.ClassroomsActivity;
 import activities.news.NewsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,10 +56,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButtonDC(View view){
-        Toast.makeText(getApplicationContext(), "En desarrollo...",
-                Toast.LENGTH_SHORT).show();
-        //Intent myIntent = new Intent(this, ChannelsActivity.class);
-        //startActivity(myIntent);
+        //Toast.makeText(getApplicationContext(), "En desarrollo...", Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(this, ClassroomsActivity.class);
+        startActivity(myIntent);
     }
 
 }
