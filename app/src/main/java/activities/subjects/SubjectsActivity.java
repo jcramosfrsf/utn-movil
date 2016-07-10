@@ -1,6 +1,8 @@
 package activities.subjects;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +15,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tomasguti.utnmovil.R;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import activities.subjects.model.Comision;
 import activities.subjects.model.Materia;
@@ -36,7 +42,6 @@ public class SubjectsActivity extends AppCompatActivity {
     private ListView listViewCommisions;
     private CommissionsAdapter commissionsAdapter;
 
-    private TextView textViewCarrera;
     private TextView textViewMateria;
     private TextView textViewComision;
 
@@ -50,13 +55,14 @@ public class SubjectsActivity extends AppCompatActivity {
         JSONObject json = JSONStubs.getMaterias();
         materias = Materia.fromJson(json);
 
+        loadPreferences();
+
         spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.careers_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new SpinnerListener());
 
-        textViewCarrera = (TextView) findViewById(R.id.textViewCarrera);
         textViewMateria = (TextView) findViewById(R.id.textViewMateria);
         textViewComision = (TextView) findViewById(R.id.textViewComision);
 
@@ -101,11 +107,6 @@ public class SubjectsActivity extends AppCompatActivity {
             textViewComision.setVisibility(View.VISIBLE);
             listViewCommisions.setVisibility(View.VISIBLE);
         }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            textViewComision.setVisibility(View.INVISIBLE);
-            listViewCommisions.setVisibility(View.INVISIBLE);
-        }
     }
 
     private class SpinnerListener implements AdapterView.OnItemSelectedListener{
@@ -134,6 +135,65 @@ public class SubjectsActivity extends AppCompatActivity {
 
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        savePreferences();
+        super.onPause();
+    }
+
+    private void savePreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        Set<String> set = new HashSet<>();
+        for (Materia materia : materias) {
+            for(Comision comision : materia.comisiones){
+                String code = materia.id_carrera+"-"+materia.id+"-"+comision.id;
+                if(comision.activa != comision.activaGuardada){
+                    if (comision.activa) {
+                        Log.d(TAG, "subscribeToTopic:"+code);
+                        //FirebaseMessaging.getInstance().subscribeToTopic(code);
+                    }else{
+                        Log.d(TAG, "unsubscribeFromTopic:"+code);
+                        //FirebaseMessaging.getInstance().unsubscribeFromTopic(code);
+                    }
+                    comision.activaGuardada = comision.activa;
+                }
+                if (comision.activa && comision.activaGuardada) {
+                    set.add(code);
+                }
+            }
+        }
+        editor.putStringSet("commissions", set);
+        editor.apply();
+    }
+
+    public void loadPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> set = sp.getStringSet("commissions", null);
+        List<String> list = new ArrayList<>();
+        if(set != null){
+            list.addAll(set);
+        }
+        for(String code : list){
+            String[] parts = code.split("-", 3);
+            int id_carrera = Integer.parseInt(parts[0]);
+            int id_materia = Integer.parseInt(parts[1]);
+            int id_comision = Integer.parseInt(parts[2]);
+            for(Materia materia : materias){
+                if(materia.id_carrera == id_carrera && materia.id == id_materia){
+                    for(Comision comision : materia.comisiones){
+                        if(comision.id == id_comision){
+                            comision.activa = comision.activaGuardada = true;
+                            Log.d(TAG, "Guardada: "+materia.nombre+ " " +comision.nombre);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 

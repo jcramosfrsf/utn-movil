@@ -40,13 +40,18 @@ public class CommissionsAdapter extends ArrayAdapter<Comision> {
 
         // Populate the data into the template view using the data object
         name.setText(newItem.nombre);
-        Log.d("SubjectsActivity", newItem.nombre + " " + newItem.activa);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 newItem.activa = isChecked;
             }
         });
-        switch1.setChecked(newItem.activa);
+
+        // Si fue modificado, tiene la prioridad ese.
+        if(newItem.activa != newItem.activaGuardada){
+            switch1.setChecked(newItem.activa);
+        }else{
+            switch1.setChecked(newItem.activaGuardada);
+        }
 
         // Return the completed view to render on screen
         return convertView;
