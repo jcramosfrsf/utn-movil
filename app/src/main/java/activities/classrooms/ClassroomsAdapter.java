@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -38,11 +39,18 @@ public class ClassroomsAdapter extends ArrayAdapter<Classroom> {
         TextView comision = (TextView) convertView.findViewById(R.id.comision);
         TextView aula = (TextView) convertView.findViewById(R.id.aula);
         TextView horario = (TextView) convertView.findViewById(R.id.horario);
+        ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar1);
 
         nombre.setText(newItem.nombre);
         comision.setText(newItem.comision);
         aula.setText(newItem.aula);
         horario.setText(newItem.horario);
+        if(newItem.horario != null){
+            progressBar.setVisibility(View.INVISIBLE);
+        }else{
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
 
         // Return the completed view to render on screen
         return convertView;

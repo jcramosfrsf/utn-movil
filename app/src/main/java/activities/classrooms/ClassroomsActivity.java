@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.squareup.picasso.Callback;
 import com.tomasguti.utnmovil.R;
 
 import org.json.JSONObject;
@@ -26,6 +29,7 @@ import activities.subjects.SubjectsActivity;
 import activities.subjects.model.Comision;
 import activities.subjects.model.Materia;
 import utils.JSONStubs;
+import utils.RequestQuery;
 
 public class ClassroomsActivity extends AppCompatActivity {
 
@@ -53,6 +57,8 @@ public class ClassroomsActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        listView = (ListView) findViewById(R.id.listView);
+
         classroomsArrayList = new ArrayList<>();
 
         for(Materia materia : materias){
@@ -62,14 +68,27 @@ public class ClassroomsActivity extends AppCompatActivity {
                     classroom.nombre = materia.nombre;
                     classroom.comision = comision.nombre;
                     classroomsArrayList.add(classroom);
+                    classroom.loadDataFromServer(this, refreshDataCallback, "2016-07-11", materia.id_carrera, materia.nivel, materia.id, comision.id);
                 }
             }
         }
 
-        listView = (ListView) findViewById(R.id.listView);
-        classroomsAdapter = new ClassroomsAdapter(this, classroomsArrayList);
+        classroomsAdapter = new ClassroomsAdapter(getApplicationContext(), classroomsArrayList);
         listView.setAdapter(classroomsAdapter);
     }
+
+    public Callback refreshDataCallback = new Callback() {
+        @Override
+        public void onSuccess() {
+            classroomsAdapter = new ClassroomsAdapter(getApplicationContext(), classroomsArrayList);
+            listView.setAdapter(classroomsAdapter);
+        }
+
+        @Override
+        public void onError() {
+
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
