@@ -12,7 +12,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 
 /**
- * Created by Tomás on 17/05/2016.
+ * Created by Tomas on 17/05/2016.
  */
 public class RequestQuery {
     private static RequestQuery mInstance;

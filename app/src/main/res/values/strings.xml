@@ -3,9 +3,15 @@
     <string name="utn_server_url">http://www.frsf.utn.edu.ar</string>
     <string name="app_name">UTN Móvil</string>
     <string name="channels_settings">Canales</string>
-    <string name="subjects_settings">Materias</string>
+    <string name="subjects_settings">Configurar Materias</string>
+    <string name="change_date">Cambiar Fecha</string>
+    <string name="force_update">Forzar Actualización</string>
+    <string name="subjects_error">Error buscando las materias desde el servidor.</string>
+    <string name="events_error">Error buscando los eventos desde el servidor.</string>
+    <string name="news_error">Error buscando las noticias desde el servidor.</string>
+    <string name="suscribe_channel">Pulsa en la esquina superior derecha para suscribirte a algún canal.</string>
     <string-array name="careers_array">
-        <item>Selecciona una carrera...</item>
+        <item>Selecciona una carrera…</item>
         <item>Ingeniería en Sistemas de Información</item>
         <item>Ingeniería Industrial</item>
         <item>Ingeniería Eléctrica</item>

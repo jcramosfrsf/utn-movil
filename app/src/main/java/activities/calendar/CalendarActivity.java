@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,9 +64,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-        // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
         loadPreferences();
@@ -88,7 +87,7 @@ public class CalendarActivity extends AppCompatActivity {
         t.commit();
 
         //Setups Day Popup Adapter
-        eventsFull = (View) findViewById(R.id.eventsFull);
+        eventsFull = findViewById(R.id.eventsFull);
         eventsFullDate = (TextView) findViewById(R.id.date);
         eventsListView = (ListView) findViewById(R.id.eventsListView);
         dayEventsList = new ArrayList<>();
@@ -117,7 +116,7 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                 }
                if(dayEventsList.size() > 0){
-                   SimpleDateFormat df = new SimpleDateFormat("EEEE dd 'de' MMMMMMMMM 'de' yyyy");
+                   SimpleDateFormat df = new SimpleDateFormat("EEEE dd 'de' MMMMMMMMM 'de' yyyy", Locale.getDefault());
                    String fullDateString = df.format(date);
                    String upperCaseFullDate = fullDateString.substring(0, 1).toUpperCase() + fullDateString.substring(1);
                    eventsFullDate.setText(upperCaseFullDate);
@@ -159,7 +158,7 @@ public class CalendarActivity extends AppCompatActivity {
         boolean needUpdate = loadPreferences();
 
         if(jsonChannels.length() == 0){
-            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.suscribe_channel, Toast.LENGTH_LONG).show();
             clearEvents();
         }else if(needUpdate){
             caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
@@ -238,8 +237,7 @@ public class CalendarActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.e(TAG, "Server Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "Error actualizando los eventos.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.events_error, Toast.LENGTH_LONG).show();
             }
         });
         // Adding request to request queue

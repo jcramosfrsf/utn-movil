@@ -1,7 +1,6 @@
 package activities.subjects;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,8 @@ import java.util.ArrayList;
 import activities.subjects.model.Comision;
 
 /**
- * Created by Tomás on 29/05/2016.
+ * Created by Tomas on 29/05/2016.
+ * Adaptador para la lista de comisiones.
  */
 public class CommissionsAdapter extends ArrayAdapter<Comision> {
     public CommissionsAdapter(Context context, ArrayList<Comision> commissions) {

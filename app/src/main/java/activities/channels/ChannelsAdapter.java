@@ -14,7 +14,7 @@ import com.tomasguti.utnmovil.R;
 import java.util.ArrayList;
 
 /**
- * Created by Tomás on 29/05/2016.
+ * Created by Tomas on 29/05/2016.
  */
 public class ChannelsAdapter extends ArrayAdapter<Channel> {
     public ChannelsAdapter(Context context, ArrayList<Channel> users) {

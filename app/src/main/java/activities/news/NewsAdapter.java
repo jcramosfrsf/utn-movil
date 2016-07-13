@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * Created by Tomás on 29/05/2016.
+ * Created by Tomas on 29/05/2016.
  */
 public class NewsAdapter extends ArrayAdapter<New> {
     public NewsAdapter(Context context, ArrayList<New> news) {

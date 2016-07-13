@@ -14,12 +14,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Callback;
 import com.tomasguti.utnmovil.R;
-
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +26,6 @@ import java.util.Set;
 
 import activities.subjects.model.Comision;
 import activities.subjects.model.Materia;
-import utils.JSONStubs;
 
 public class SubjectsActivity extends AppCompatActivity {
 
@@ -36,7 +33,6 @@ public class SubjectsActivity extends AppCompatActivity {
 
     private AutoCompleteTextView autoCompleteTextView;
     private ArrayAdapter autoCompleteAdapter;
-    private ArrayList<Materia> materias;
     private ArrayList<Materia> materiasDeCarrera;
     private Spinner spinner;
     private ListView listViewCommisions;
@@ -52,25 +48,16 @@ public class SubjectsActivity extends AppCompatActivity {
 
         materiasDeCarrera = new ArrayList<>();
 
-        JSONObject json = JSONStubs.getMaterias();
-        materias = Materia.fromJson(json);
-
-        loadPreferences();
-
         spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.careers_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new SpinnerListener());
+
+        spinner.setEnabled(false);
 
         textViewMateria = (TextView) findViewById(R.id.textViewMateria);
         textViewComision = (TextView) findViewById(R.id.textViewComision);
-
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        autoCompleteTextView.setOnItemClickListener(new AutoCompleteListener());
-        autoCompleteTextView.setOnFocusChangeListener(new AutoCompleteOnFocusListener());
-        autoCompleteTextView.setThreshold(1);
-
         listViewCommisions = (ListView) findViewById(R.id.listViewCommisions);
 
         ArrayList<Comision> comisiones = new ArrayList<>();
@@ -80,7 +67,26 @@ public class SubjectsActivity extends AppCompatActivity {
         textViewComision.setVisibility(View.INVISIBLE);
         listViewCommisions.setVisibility(View.INVISIBLE);
         autoCompleteTextView.setVisibility(View.INVISIBLE);
+
+        Materia.loadFromServer(this, callbackGetMaterias);
     }
+
+    private Callback callbackGetMaterias = new Callback() {
+        @Override
+        public void onSuccess() {
+            spinner.setEnabled(true);
+            loadPreferences();
+            spinner.setOnItemSelectedListener(new SpinnerListener());
+            autoCompleteTextView.setOnItemClickListener(new AutoCompleteListener());
+            autoCompleteTextView.setOnFocusChangeListener(new AutoCompleteOnFocusListener());
+            autoCompleteTextView.setThreshold(1);
+        }
+
+        @Override
+        public void onError() {
+            Toast.makeText(getApplicationContext(), R.string.subjects_error, Toast.LENGTH_LONG).show();
+        }
+    };
 
     private class AutoCompleteOnFocusListener implements AdapterView.OnFocusChangeListener{
         public void onFocusChange(View view, boolean focus) {
@@ -117,7 +123,7 @@ public class SubjectsActivity extends AppCompatActivity {
                 String careerCodeString = getResources().getStringArray(R.array.careers_array_id)[pos];
                 int careerCode = Integer.parseInt(careerCodeString);
                 materiasDeCarrera = new ArrayList<>();
-                for(Materia materia : materias){
+                for(Materia materia : Materia.actuales){
                     if(materia.id_carrera == careerCode){
                         materiasDeCarrera.add(materia);
                     }
@@ -145,10 +151,15 @@ public class SubjectsActivity extends AppCompatActivity {
     }
 
     private void savePreferences(){
+
+        if(Materia.actuales == null){
+            return;
+        }
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sp.edit();
         Set<String> set = new HashSet<>();
-        for (Materia materia : materias) {
+        for (Materia materia : Materia.actuales) {
             for(Comision comision : materia.comisiones){
                 String code = materia.id_carrera+"-"+materia.id+"-"+comision.id;
                 if(comision.activa != comision.activaGuardada){
@@ -171,6 +182,11 @@ public class SubjectsActivity extends AppCompatActivity {
     }
 
     public void loadPreferences(){
+
+        if(Materia.actuales == null){
+            return;
+        }
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> set = sp.getStringSet("commissions", null);
         List<String> list = new ArrayList<>();
@@ -182,7 +198,7 @@ public class SubjectsActivity extends AppCompatActivity {
             int id_carrera = Integer.parseInt(parts[0]);
             int id_materia = Integer.parseInt(parts[1]);
             int id_comision = Integer.parseInt(parts[2]);
-            for(Materia materia : materias){
+            for(Materia materia : Materia.actuales){
                 if(materia.id_carrera == id_carrera && materia.id == id_materia){
                     for(Comision comision : materia.comisiones){
                         if(comision.id == id_comision){

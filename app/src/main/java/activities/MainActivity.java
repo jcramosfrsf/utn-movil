@@ -19,23 +19,15 @@ package activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.tomasguti.utnmovil.R;
 
 import activities.calendar.CalendarActivity;
-import activities.channels.ChannelsActivity;
 import activities.classrooms.ClassroomsActivity;
 import activities.news.NewsActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +38,14 @@ public class MainActivity extends AppCompatActivity {
     public void clickButtonNews(View view){
         Intent myIntent = new Intent(this, NewsActivity.class);
         startActivity(myIntent);
-        //disable button?
     }
 
     public void clickButtonCalendar(View view){
         Intent myIntent = new Intent(this, CalendarActivity.class);
         startActivity(myIntent);
-        //disable button?
     }
 
     public void clickButtonDC(View view){
-        //Toast.makeText(getApplicationContext(), "En desarrollo...", Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, ClassroomsActivity.class);
         startActivity(myIntent);
     }

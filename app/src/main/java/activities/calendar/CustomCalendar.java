@@ -4,7 +4,7 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 
 /**
- * Created by Tomás on 01/07/2016.
+ * Created by Tomas on 01/07/2016.
  */
 public class CustomCalendar extends CaldroidFragment {
     @Override

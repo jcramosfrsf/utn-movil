@@ -9,9 +9,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- * Created by Tomás on 29/05/2016.
+ * Created by Tomas on 29/05/2016.
  */
 public class CalendarEvent {
 
@@ -29,7 +30,7 @@ public class CalendarEvent {
             this.titulo = object.getString("titulo");
             this.lugar = object.getString("lugar");
             String stringFecha = object.getString("fecha");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSS'Z'");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSS'Z'", Locale.getDefault());
             fecha =  df.parse(stringFecha);
         } catch (JSONException | ParseException e) {
             e.printStackTrace();

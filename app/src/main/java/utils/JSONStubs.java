@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Tomás on 29/05/2016.
+ * Created by Tomas on 29/05/2016.
  */
 public class JSONStubs{
 

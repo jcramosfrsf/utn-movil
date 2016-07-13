@@ -13,8 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.squareup.picasso.Callback;
 import com.tomasguti.utnmovil.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,15 +20,14 @@ import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import utils.RequestQuery;
 
 /**
- * Created by Tomás on 10/07/2016.
+ * Created by Tomas on 10/07/2016.
  */
 public class Classroom {
+    public int id_carrera;
     public String nombre;
     public String comision;
     public String aula;
@@ -60,14 +57,22 @@ public class Classroom {
                                 list.add(text);
                             }
                         }
-                        horario = list.get(1);
-                        aula = list.get(3);
+                        if(list.size() > 3){
+                            horario = list.get(1);
+                            aula = list.get(3);
+                        }else{
+                            horario = "-";
+                            aula = "-";
+                        }
                         callback.onSuccess();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Response", "Error");
+                Log.d("Response", "Error Materia "+nombre);
+                horario = "-";
+                aula = "-";
+                callback.onError();
             }
         }){
             String mRequestBody = "fecha_inicio="+fecha_inicio+"&carrera="+carrera+"&nivel="+nivel+"&materia="+materia+"&comisiones="+comisiones;

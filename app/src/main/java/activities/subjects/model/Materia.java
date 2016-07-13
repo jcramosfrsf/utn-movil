@@ -1,12 +1,24 @@
 package activities.subjects.model;
 
+import android.content.Context;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.squareup.picasso.Callback;
+import com.tomasguti.utnmovil.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import utils.RequestQuery;
+
 /**
- * Created by Tomás on 09/07/2016.
+ * Created by Tomas on 09/07/2016.
+ * Objecto con la información de una materia.
+ * La clase además se encarga de traerlas del servidor y parsearlas.
  */
 public class Materia {
     public int id;
@@ -14,6 +26,8 @@ public class Materia {
     public int nivel;
     public String nombre;
     public ArrayList<Comision> comisiones;
+
+    public static ArrayList<Materia> actuales;
 
     // Constructor to convert JSON object into a Java class instance
     public Materia(JSONObject object){
@@ -51,6 +65,33 @@ public class Materia {
             materias.add(materia);
         }
         return materias;
+    }
+
+    public static void loadFromServer(Context context, final Callback callback){
+
+        if(actuales != null){
+            callback.onSuccess();
+            return;
+        }
+
+        String url = context.getResources().getString(R.string.utn_server_url) + "/getMaterias.php";
+
+        JsonObjectRequest request = new JsonObjectRequest(url,
+        new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                actuales = fromJson(response);
+                callback.onSuccess();
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onError();
+            }
+        });
+
+        RequestQuery.getInstance(context).addToRequestQueue(request);
     }
 
     @Override
