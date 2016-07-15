@@ -25,7 +25,7 @@
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_below="@+id/my_toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
 
     </RelativeLayout>
 
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/eventsFull"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_below="@+id/my_toolbar">
 
         <RelativeLayout
@@ -61,7 +61,8 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="center_vertical|center_horizontal"
                 android:layout_toLeftOf="@+id/closeButton"
-                android:layout_toStartOf="@+id/closeButton" />
+                android:layout_toStartOf="@+id/closeButton"
+                android:textSize="18dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"

@@ -37,7 +37,7 @@ public class Classroom {
 
     }
 
-    public void loadDataFromServer(Context context, final Callback callback, final String fecha_inicio, final int carrera, final int nivel, final int materia, final int comisiones){
+    public void loadDataFromServer(final Context context, final Callback callback, final String fecha_inicio, final int carrera, final int nivel, final int materia, final int comisiones){
 
         String url = context.getResources().getString(R.string.utn_server_url)+"/getDistribucion.php";
 
@@ -46,7 +46,7 @@ public class Classroom {
                     @Override
                     public void onResponse(String response) {
                         //Parse
-                        Log.d("Response", response);
+                        //Log.d("Response", response);
                         Document doc = Jsoup.parse(response);
                         Elements tableRow = doc.getElementsByTag("td");
                         ArrayList<String> list = new ArrayList<>();
@@ -61,8 +61,8 @@ public class Classroom {
                             horario = list.get(1);
                             aula = list.get(3);
                         }else{
-                            horario = "-";
-                            aula = "-";
+                            horario = context.getResources().getString(R.string.subject_no_info);
+                            aula = "";
                         }
                         callback.onSuccess();
                     }
@@ -70,8 +70,8 @@ public class Classroom {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("Response", "Error Materia "+nombre);
-                horario = "-";
-                aula = "-";
+                horario = context.getResources().getString(R.string.subject_error);
+                aula = "";
                 callback.onError();
             }
         }){

@@ -117,8 +117,6 @@ public class SubjectsActivity extends AppCompatActivity {
 
     private class SpinnerListener implements AdapterView.OnItemSelectedListener{
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            // An item was selected. You can retrieve the selected item using
-
             if(pos != 0){
                 String careerCodeString = getResources().getStringArray(R.array.careers_array_id)[pos];
                 int careerCode = Integer.parseInt(careerCodeString);
@@ -132,11 +130,14 @@ public class SubjectsActivity extends AppCompatActivity {
                 autoCompleteTextView.setAdapter(autoCompleteAdapter);
                 textViewMateria.setVisibility(View.VISIBLE);
                 autoCompleteTextView.setVisibility(View.VISIBLE);
+                textViewComision.setVisibility(View.INVISIBLE);
+                listViewCommisions.setVisibility(View.INVISIBLE);
             }else{
                 textViewMateria.setVisibility(View.INVISIBLE);
                 autoCompleteTextView.setVisibility(View.INVISIBLE);
+                textViewComision.setVisibility(View.INVISIBLE);
+                listViewCommisions.setVisibility(View.INVISIBLE);
             }
-
         }
 
         public void onNothingSelected(AdapterView<?> parent) {

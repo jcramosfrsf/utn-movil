@@ -2,7 +2,6 @@ package activities.classrooms;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -40,7 +39,7 @@ import activities.subjects.model.Materia;
 
 public class ClassroomsActivity extends AppCompatActivity {
 
-    public static final String TAG = SubjectsActivity.class.getSimpleName();
+    public static final String TAG = ClassroomsActivity.class.getSimpleName();
 
     private ArrayList<Classroom> classroomsArrayList;
     private ListView listView;
@@ -117,6 +116,9 @@ public class ClassroomsActivity extends AppCompatActivity {
     }
 
     public void refreshList(){
+        if(classroomsArrayList.isEmpty()){
+            Toast.makeText(getApplicationContext(), R.string.suscribe_subjects, Toast.LENGTH_LONG).show();
+        }
         ClassroomsAdapter classroomsAdapter = new ClassroomsAdapter(getApplicationContext(), classroomsArrayList);
         listView.setAdapter(classroomsAdapter);
     }
@@ -209,16 +211,15 @@ public class ClassroomsActivity extends AppCompatActivity {
 
     public void loadPreferences(){
 
-        if(Materia.actuales == null){
-            return;
-        }
+        if(Materia.actuales == null){ return; }
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> set = sp.getStringSet("commissions", null);
         List<String> list = new ArrayList<>();
-        if(set != null){
+        if(set != null) {
             list.addAll(set);
         }
+
         for(String code : list){
             String[] parts = code.split("-", 3);
             int id_carrera = Integer.parseInt(parts[0]);
@@ -229,7 +230,7 @@ public class ClassroomsActivity extends AppCompatActivity {
                     for(Comision comision : materia.comisiones){
                         if(comision.id == id_comision){
                             comision.activa = comision.activaGuardada = true;
-                            Log.d(TAG, "Guardada: "+materia.nombre+ " " +comision.nombre);
+                            //Log.d(TAG, "Guardada: "+materia.nombre+ " " +comision.nombre);
                             break;
                         }
                     }
