@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
@@ -57,7 +59,12 @@ public class RequestQuery {
         return mRequestQueue;
     }
 
+    public static final int TIMEOUT_MS = 6000;
+    public static final int MAX_RETRIES = 1;
+
     public <T> void addToRequestQueue(Request<T> req) {
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(TIMEOUT_MS, MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        req.setRetryPolicy(retryPolicy);
         getRequestQueue().add(req);
     }
 /*

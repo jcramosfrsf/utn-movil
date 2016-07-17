@@ -24,7 +24,7 @@ public class ChannelsActivity extends AppCompatActivity {
 
         Channel.loadPreferences(this);
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView1);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -51,7 +51,7 @@ public class ChannelsActivity extends AppCompatActivity {
 
     private void updateListView(){
         adapter = new ChannelsAdapter(this, Channel.currents);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView1);
         listView.setAdapter(adapter);
         progressBar.setVisibility(View.GONE);
     }

@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,7 +60,7 @@ public class ClassroomsActivity extends AppCompatActivity {
         dateTextView = (TextView) findViewById(R.id.date);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView1);
     }
 
     @Override

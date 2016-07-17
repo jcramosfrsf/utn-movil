@@ -35,10 +35,17 @@ public class Channel {
     public boolean activo;
     public static ArrayList<Channel> currents;
     public static List<String> saved;
+    public boolean selected;
+
+    public Channel(){
+        activo = false;
+        selected = false;
+    }
 
     // Constructor to convert JSON object into a Java class instance
     public Channel(JSONObject object){
         activo = false;
+        selected = false;
         try {
             this._id = object.getString("_id");
             this.nombre = object.getString("nombre");

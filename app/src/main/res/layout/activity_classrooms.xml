@@ -31,16 +31,16 @@
             android:textColor="#616161"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_alignLeft="@+id/listView"
-            android:layout_alignStart="@+id/listView"
-            android:layout_alignRight="@+id/listView"
-            android:layout_alignEnd="@+id/listView"
+            android:layout_alignLeft="@+id/listView1"
+            android:layout_alignStart="@+id/listView1"
+            android:layout_alignRight="@+id/listView1"
+            android:layout_alignEnd="@+id/listView1"
             android:gravity="center" />
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
+            android:id="@+id/listView1"
             android:layout_centerHorizontal="true"
             android:dividerHeight="0dp"
             android:divider="@null"

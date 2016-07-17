@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.Set;
 
 import activities.channels.ChannelsActivity;
+import activities.channels.ChannelsSlidingMenu;
+import activities.channels.FilterSingleChannelListener;
 import utils.RequestQuery;
 
 public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -44,6 +47,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     private ArrayList<New> newsList;
     private JSONArray jsonChannels;
     private boolean firstOnCreate;
+    private ChannelsSlidingMenu channelsSlidingMenu;
 
     private int offSet = 0;
 
@@ -59,8 +63,11 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        channelsSlidingMenu = new ChannelsSlidingMenu(this, filterSingleChannelListener);
+        channelsSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView1);
         newsList = new ArrayList<>();
         adapter = new NewsAdapter(this, newsList);
         listView.setAdapter(adapter);
@@ -82,15 +89,49 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         firstOnCreate = true;
     }
 
+    public FilterSingleChannelListener filterSingleChannelListener = new FilterSingleChannelListener() {
+
+        @Override
+        public void updateAllChannels() {
+            updateNews(true);
+            if(channelsSlidingMenu.isMenuShowing()) {
+                channelsSlidingMenu.toggle();
+            }
+        }
+
+        @Override
+        public void updateSingleChannel(String channel) {
+            List<String> list = new ArrayList<>();
+            list.add(channel);
+            jsonChannels = new JSONArray(list);
+            clearNews();
+            swipeRefreshLayout.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            swipeRefreshLayout.setRefreshing(true);
+                                            fetchNews();
+                                        }
+                                    }
+            );
+            if(channelsSlidingMenu.isMenuShowing()) {
+                channelsSlidingMenu.toggle();
+            }
+        }
+    };
+
     @Override
     public void onResume(){
+        updateNews(false);
+        super.onResume();
+    }
 
+    private void updateNews(boolean force){
         boolean needUpdate = loadPreferences();
 
         if(jsonChannels.length() == 0){
             clearNews();
-            Toast.makeText(getApplicationContext(), "Pulsa en la esquina superior derecha para suscribirte a algún canal.", Toast.LENGTH_LONG).show();
-        }else if(needUpdate || firstOnCreate){
+            Toast.makeText(getApplicationContext(), R.string.suscribe_channel, Toast.LENGTH_LONG).show();
+        }else if(needUpdate || firstOnCreate || force){
             clearNews();
             swipeRefreshLayout.post(new Runnable() {
                                         @Override
@@ -102,8 +143,6 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             );
             firstOnCreate = false;
         }
-
-        super.onResume();
     }
 
     private void clearNews(){
@@ -182,7 +221,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Log.e(TAG, "Server Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "Error actualizando las noticias.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.news_error, Toast.LENGTH_LONG).show();
                 // stopping swipe refresh
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -212,5 +251,4 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         return updatedChannels;
     }
-
 }

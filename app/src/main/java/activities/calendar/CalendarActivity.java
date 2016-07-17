@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 import com.tomasguti.utnmovil.R;
@@ -40,6 +41,8 @@ import java.util.Map;
 import java.util.Set;
 
 import activities.channels.ChannelsActivity;
+import activities.channels.ChannelsSlidingMenu;
+import activities.channels.FilterSingleChannelListener;
 import utils.RequestQuery;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -56,11 +59,15 @@ public class CalendarActivity extends AppCompatActivity {
     Calendar cal;
     private JSONArray jsonChannels;
     Map<Integer, Integer> eventsMap;
+    private ChannelsSlidingMenu channelsSlidingMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        channelsSlidingMenu = new ChannelsSlidingMenu(this, filterSingleChannelListener);
+        channelsSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -100,6 +107,10 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onSelectDate(Date date, View view) {
                 //Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_SHORT).show();
+
+                if(eventsList == null){
+                    return;
+                }
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
@@ -151,6 +162,29 @@ public class CalendarActivity extends AppCompatActivity {
         // Setup Caldroid
         caldroidFragment.setCaldroidListener(listener);
     }
+
+    public FilterSingleChannelListener filterSingleChannelListener = new FilterSingleChannelListener() {
+
+        @Override
+        public void updateAllChannels() {
+            loadPreferences();
+            caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
+            if(channelsSlidingMenu.isMenuShowing()) {
+                channelsSlidingMenu.toggle();
+            }
+        }
+
+        @Override
+        public void updateSingleChannel(String channel) {
+            List<String> list = new ArrayList<>();
+            list.add(channel);
+            jsonChannels = new JSONArray(list);
+            caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
+            if(channelsSlidingMenu.isMenuShowing()) {
+                channelsSlidingMenu.toggle();
+            }
+        }
+    };
 
     @Override
     public void onResume(){
