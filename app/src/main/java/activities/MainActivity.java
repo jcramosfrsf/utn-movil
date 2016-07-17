@@ -23,6 +23,7 @@ import android.view.View;
 
 import com.tomasguti.utnmovil.R;
 
+import activities.about.AboutActivity;
 import activities.calendar.CalendarActivity;
 import activities.classrooms.ClassroomsActivity;
 import activities.news.NewsActivity;
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickButtonDC(View view){
         Intent myIntent = new Intent(this, ClassroomsActivity.class);
+        startActivity(myIntent);
+    }
+
+    public void clickButtonAbout(View view){
+        Intent myIntent = new Intent(this, AboutActivity.class);
         startActivity(myIntent);
     }
 

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="26dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="false">
 
@@ -21,7 +21,6 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/ic_brightness_1_black_24dp"
             android:visibility="visible"
-            android:layout_alignBottom="@+id/tv1"
             android:layout_centerHorizontal="true" />
 
         <TextView
@@ -30,13 +29,13 @@
             android:layout_height="wrap_content"
             android:textSize="10dp"
             android:gravity="center"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textAlignment="center"
             android:visibility="visible"
             android:text="9"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 
