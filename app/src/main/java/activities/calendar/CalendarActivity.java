@@ -74,6 +74,12 @@ public class CalendarActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        String tag = "eventos";
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(tag, 0);
+        editor.apply();
+
         loadPreferences();
 
         caldroidFragment = new CustomCalendar();

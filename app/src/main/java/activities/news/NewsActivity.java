@@ -63,6 +63,12 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        String tag = "noticias";
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(tag, 0);
+        editor.apply();
+
         channelsSlidingMenu = new ChannelsSlidingMenu(this, filterSingleChannelListener);
         channelsSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 

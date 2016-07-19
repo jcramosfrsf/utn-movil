@@ -17,9 +17,14 @@
 package activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tomasguti.utnmovil.R;
 
@@ -34,6 +39,40 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    public void onResume(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int noticias = sp.getInt("noticias", 0);
+        int eventos = sp.getInt("eventos", 0);
+        int mensajes = sp.getInt("mensajes", 0);
+
+        ImageView noticiasNotification = (ImageView) findViewById(R.id.noticiasNotification);
+        TextView noticiasNotificationText = (TextView) findViewById(R.id.noticiasNotificationText);
+
+        ImageView eventosNotification = (ImageView) findViewById(R.id.eventosNotification);
+        TextView eventosNotificationText = (TextView) findViewById(R.id.eventosNotificationText);
+
+        if(noticias > 0){
+            noticiasNotification.setVisibility(View.VISIBLE);
+            noticiasNotificationText.setVisibility(View.VISIBLE);
+            noticiasNotificationText.setText(""+noticias);
+        }else{
+            noticiasNotification.setVisibility(View.GONE);
+            noticiasNotificationText.setVisibility(View.GONE);
+        }
+
+        if(eventos > 0){
+            eventosNotification.setVisibility(View.VISIBLE);
+            eventosNotificationText.setVisibility(View.VISIBLE);
+            noticiasNotificationText.setText(""+eventos);
+        }else{
+            eventosNotification.setVisibility(View.GONE);
+            eventosNotificationText.setVisibility(View.GONE);
+        }
+
+        Log.d("MainActivity", "Noticias: " + noticias + " Eventos: " + eventos +" Mensajes: "+ mensajes);
+        super.onResume();
     }
 
     public void clickButtonNews(View view){

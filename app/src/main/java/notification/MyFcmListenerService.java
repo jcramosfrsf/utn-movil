@@ -20,10 +20,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import activities.MainActivity;
@@ -32,21 +34,22 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.tomasguti.utnmovil.R;
 
-import java.util.Map;
-
 public class MyFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFcmListenerService";
 
     @Override
     public void onMessageReceived(RemoteMessage message){
-
         String from = message.getFrom();
         RemoteMessage.Notification notification = message.getNotification();
-
+        String tag = notification.getTag();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sp.edit();
+        int count = sp.getInt(tag, 0);
+        editor.putInt(tag, count+1);
+        editor.apply();
         sendNotification(notification);
     }
-    // [END receive_message]
 
     private void sendNotification(RemoteMessage.Notification notification) {
         Intent intent = new Intent(this, MainActivity.class);
@@ -60,6 +63,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
                 .setAutoCancel(true)
+                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.caldroid_holo_blue_dark))
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
