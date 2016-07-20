@@ -28,6 +28,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Testing dependencies
     compile project(":slidingmenu")
+    compile project(":htmlspanner")
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.roomorama:caldroid:3.0.1'

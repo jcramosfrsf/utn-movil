@@ -1,6 +1,7 @@
 package activities.news;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.tomasguti.utnmovil.R;
+
+import org.jsoup.Jsoup;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ public class NewsAdapter extends ArrayAdapter<New> {
         if(!newItem.imagen.isEmpty()){
             imageView.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(newItem.imagen).into(imageView);
-            charsLimit = 128;
+            //charsLimit = 128;
         }else{
             imageView.setVisibility(View.GONE);
         }
@@ -51,10 +54,11 @@ public class NewsAdapter extends ArrayAdapter<New> {
         author.setText(newItem.autor + " - " + date);
         title.setText(newItem.titulo);
 
-        String shortBodyString = newItem.cuerpo;
+        String shortBodyString = Jsoup.parse(newItem.cuerpo).text();
         if(shortBodyString.length() > charsLimit){
             shortBodyString = shortBodyString.substring(0, charsLimit) + "...";
         }
+
         body.setText(shortBodyString);
 
         // Return the completed view to render on screen

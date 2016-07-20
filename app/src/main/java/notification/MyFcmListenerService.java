@@ -62,6 +62,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_stat_utn)
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
+                .setGroup(notification.getTag())
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.caldroid_holo_blue_dark))
                 .setSound(defaultSoundUri)

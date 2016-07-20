@@ -24,7 +24,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyInstanceIDListenerService extends FirebaseInstanceIdService  {
 
-    private static final String TAG = "MyInstanceIDLS";
+    private static final String TAG = "MyInstanceIDListenerService";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
