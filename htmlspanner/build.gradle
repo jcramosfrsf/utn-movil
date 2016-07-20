@@ -1,0 +1,39 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repo.pageturner-reader.org"
+    }
+}
+
+dependencies {
+    compile 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
+    compile files('libs/osbcp-css-parser-1.4.jar')
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+    }
+}
+
+android {
+    lintOptions {
+         abortOnError false
+    }
+}
+
