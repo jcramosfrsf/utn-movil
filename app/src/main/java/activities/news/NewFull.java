@@ -62,7 +62,7 @@ public class NewFull extends AppCompatActivity {
         HtmlSpanner htmlSpanner = new HtmlSpanner();
         htmlSpanner.unregisterHandler("img");
         htmlSpanner.registerHandler("img", new ImgHandler(body));
-        htmlSpanner.setStripExtraWhiteSpace(true);
+        //htmlSpanner.setStripExtraWhiteSpace(true);
         Spannable spanned = htmlSpanner.fromHtml(newItem.cuerpo);
         body.setText(spanned);
         body.setMovementMethod(LinkMovementMethod.getInstance());

@@ -360,6 +360,8 @@ public class HtmlSpanner {
         registerHandler("cite", italicHandler);
         registerHandler("dfn", italicHandler);
 
+        registerHandler("u", new UnderlineHandler());
+
         TagNodeHandler boldHandler = new StyledTextHandler(
                 new Style().setFontWeight(Style.FontWeight.BOLD));
 

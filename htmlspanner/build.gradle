@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     compile 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
-    compile files('libs/osbcp-css-parser-1.4.jar')
+    compile files('libs/cssparser-1.5.jar')
 }
 
 android {

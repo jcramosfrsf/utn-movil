@@ -115,7 +115,7 @@ public abstract class TagNodeHandler {
 
 		int len = builder.length();
 
-		if (this.spanner.isStripExtraWhiteSpace()) {
+		if (this.spanner.isStripExtraWhiteSpace() || true) {
 			// Should never have more than 2 \n characters in a row.
 			if (len > 2 && builder.charAt(len - 1) == '\n'
 					&& builder.charAt(len - 2) == '\n') {
