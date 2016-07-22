@@ -22,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.tomasguti.utnmovil.R;
 
 import org.json.JSONArray;
@@ -37,11 +39,11 @@ import activities.channels.ChannelsSlidingMenu;
 import activities.channels.FilterSingleChannelListener;
 import utils.RequestQuery;
 
-public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayout.OnRefreshListener{
 
     public static final String TAG = NewsActivity.class.getSimpleName();
 
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipyRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private NewsAdapter adapter;
     private ArrayList<New> newsList;
@@ -72,7 +74,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         channelsSlidingMenu = new ChannelsSlidingMenu(this, filterSingleChannelListener);
         channelsSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.listView1);
         newsList = new ArrayList<>();
         adapter = new NewsAdapter(this, newsList);
@@ -115,7 +117,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                                         @Override
                                         public void run() {
                                             swipeRefreshLayout.setRefreshing(true);
-                                            fetchNews();
+                                            fetchNews(SwipyRefreshLayoutDirection.TOP);
                                         }
                                     }
             );
@@ -143,7 +145,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                                         @Override
                                         public void run() {
                                             swipeRefreshLayout.setRefreshing(true);
-                                            fetchNews();
+                                            fetchNews(SwipyRefreshLayoutDirection.TOP);
                                         }
                                     }
             );
@@ -153,14 +155,13 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void clearNews(){
         offSet = 0;
-        newsList = new ArrayList<>();
-        adapter = new NewsAdapter(this, newsList);
-        listView.setAdapter(adapter);
+        newsList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onRefresh() {
-        fetchNews();
+    public void onRefresh(SwipyRefreshLayoutDirection direction) {
+        fetchNews(direction);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         return true;
     }
 
-    private void fetchNews() {
+    private void fetchNews(final SwipyRefreshLayoutDirection direction) {
 
         // showing refresh animation before making http call
         swipeRefreshLayout.setRefreshing(true);
@@ -194,6 +195,12 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             json.put("channels", jsonChannels);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if(direction == SwipyRefreshLayoutDirection.TOP){
+            offSet = 0;
+        }else{
+            offSet = newsList.size();
         }
 
         // appending offset to url
@@ -206,29 +213,26 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
-                        if (response.length() > 0) {
-                            // looping through json and adding to movies list
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject newObj = response.getJSONObject(i);
-                                    New m = new New(newObj);
-                                    newsList.add(0, m);
-                                    offSet = newsList.size();
-                                } catch (JSONException e) {
-                                    Log.e(TAG, "JSON Parsing error: " + e.getMessage());
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
+                        if(direction == SwipyRefreshLayoutDirection.TOP){
+                            newsList.clear();
                         }
-                        // stopping swipe refresh
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject newObj = response.getJSONObject(i);
+                                New m = new New(newObj);
+                                newsList.add(m);
+                                offSet = newsList.size();
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.e(TAG, "Server Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(), R.string.news_error, Toast.LENGTH_LONG).show();
-                // stopping swipe refresh
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -256,5 +260,11 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         jsonChannels = new JSONArray(list);
 
         return updatedChannels;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //TODO: Guardar las noticias cuando se rota el dispositivo.
     }
 }

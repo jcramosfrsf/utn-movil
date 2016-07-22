@@ -38,7 +38,7 @@ public class NewsAdapter extends ArrayAdapter<New> {
         TextView title = (TextView) convertView.findViewById(R.id.title);
         TextView body = (TextView) convertView.findViewById(R.id.body);
 
-        int charsLimit = 180;
+        int charsLimit = 256;
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
         if(!newItem.imagen.isEmpty()){
             imageView.setVisibility(View.VISIBLE);
