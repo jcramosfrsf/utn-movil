@@ -56,6 +56,7 @@ public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_news);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -76,7 +77,19 @@ public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayou
 
         swipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.listView1);
-        newsList = new ArrayList<>();
+
+        if(savedInstanceState != null){
+            newsList = savedInstanceState.getParcelableArrayList("NEWS");
+
+            int channelSelected = savedInstanceState.getInt("CHANNEL_SELECTED", 0);
+            channelsSlidingMenu.illuminatePostion(channelSelected);
+        }
+
+        if(newsList == null){
+            firstOnCreate = true;
+            newsList = new ArrayList<>();
+        }
+
         adapter = new NewsAdapter(this, newsList);
         listView.setAdapter(adapter);
 
@@ -94,7 +107,6 @@ public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayou
             }
         });
 
-        firstOnCreate = true;
     }
 
     public FilterSingleChannelListener filterSingleChannelListener = new FilterSingleChannelListener() {
@@ -265,6 +277,12 @@ public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayou
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //TODO: Guardar las noticias cuando se rota el dispositivo.
+        if(newsList != null){
+            outState.putParcelableArrayList("NEWS", newsList);
+        }
+
+        if(channelsSlidingMenu != null){
+            outState.putInt("CHANNEL_SELECTED", channelsSlidingMenu.getSelectedPosition());
+        }
     }
 }

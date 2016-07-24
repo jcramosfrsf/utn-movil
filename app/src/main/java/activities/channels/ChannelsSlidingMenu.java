@@ -2,6 +2,7 @@ package activities.channels;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,28 +43,45 @@ public class ChannelsSlidingMenu extends SlidingMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                //Reset Selected
-                for(int i=0; i < adapter.getCount(); i++){
-                    Channel channel = adapter.getItem(i);
-                    channel.selected = false;
-                }
-
+                illuminatePostion(position);
                 if(position == 0){
                     listener.updateAllChannels();
-                    adapter.getItem(0).selected = true;
                 }else{
                     Channel singleChannel =  adapter.getItem(position);
-                    singleChannel.selected = true;
                     String channelName = singleChannel._id;
                     listener.updateSingleChannel(channelName);
                 }
-
-               adapter.notifyDataSetInvalidated();
             }
         });
 
         Channel.loadPreferences(context);
         Channel.loadFromServer(context, callback);
+    }
+
+    public void illuminatePostion(int position){
+        //Reset Selected
+        for(int i=0; i < adapter.getCount(); i++){
+            Channel channel = adapter.getItem(i);
+            channel.selected = false;
+        }
+
+        if(position == 0){
+            adapter.getItem(0).selected = true;
+        }else{
+            Channel singleChannel =  adapter.getItem(position);
+            singleChannel.selected = true;
+        }
+        adapter.notifyDataSetInvalidated();
+    }
+
+    public int getSelectedPosition(){
+        for(int i=0; i < adapter.getCount(); i++){
+            Channel channel = adapter.getItem(i);
+            if(channel.selected) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     private Callback callback = new Callback() {

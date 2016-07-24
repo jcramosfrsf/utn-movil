@@ -60,6 +60,7 @@ public class CalendarActivity extends AppCompatActivity {
     private JSONArray jsonChannels;
     Map<Integer, Integer> eventsMap;
     private ChannelsSlidingMenu channelsSlidingMenu;
+    private boolean skipChangeMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,20 +81,32 @@ public class CalendarActivity extends AppCompatActivity {
         editor.putInt(tag, 0);
         editor.apply();
 
-        loadPreferences();
-
         caldroidFragment = new CustomCalendar();
+
         cal = Calendar.getInstance();
         Bundle args = new Bundle();
-
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultDark);
         args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
         args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
-
         caldroidFragment.setArguments(args);
         caldroidFragment.setTextColorForDate(R.color.currentDateColor, cal.getTime());
+
+        if(savedInstanceState != null){
+            caldroidFragment.restoreStatesFromKey(savedInstanceState, "CALDROID_SAVED_STATE");
+            if(savedInstanceState.get("CALDROID_SAVED_STATE") != null){
+                skipChangeMonth = true;
+            }
+
+            eventsList = savedInstanceState.getParcelableArrayList("EVENTS");
+            if(eventsList != null){
+                refreshEventList();
+            }
+
+            int channelSelected = savedInstanceState.getInt("CHANNEL_SELECTED", 0);
+            channelsSlidingMenu.illuminatePostion(channelSelected);
+        }
 
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.replace(R.id.calendarView, caldroidFragment);
@@ -106,6 +119,8 @@ public class CalendarActivity extends AppCompatActivity {
         dayEventsList = new ArrayList<>();
         eventsListAdapter = new EventsListAdapter(this, dayEventsList);
         eventsListView.setAdapter(eventsListAdapter);
+
+        loadPreferences();
 
         // Setup listener
         final CaldroidListener listener = new CaldroidListener() {
@@ -148,8 +163,12 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onChangeMonth(int month, int year) {
-                clearEvents();
-                fetchEvents(month, year);
+                if(skipChangeMonth){
+                    skipChangeMonth = false;
+                }else{
+                    clearEvents();
+                    fetchEvents(month, year);
+                }
             }
             /*
             @Override
@@ -201,6 +220,7 @@ public class CalendarActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.suscribe_channel, Toast.LENGTH_LONG).show();
             clearEvents();
         }else if(needUpdate){
+            Log.d(TAG, "onResume "+ needUpdate);
             caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
         }
 
@@ -257,22 +277,8 @@ public class CalendarActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         //Log.d(TAG, response.toString());
-                        if (response.length() > 0) {
-                            eventsList = CalendarEvent.fromJson(response);
-                            Calendar calendar = Calendar.getInstance();
-                            for(CalendarEvent event : eventsList){
-                                calendar.setTime(event.fecha);
-                                int dayIndex = calendar.get(Calendar.DAY_OF_MONTH);
-                                if (eventsMap.containsKey(dayIndex)) {
-                                    eventsMap.put(dayIndex, eventsMap.get(dayIndex)+1);
-                                }else{
-                                    eventsMap.put(dayIndex, 1);
-                                }
-                            }
-                            Map<String, Object> extraData = caldroidFragment.getExtraData();
-                            extraData.put("EVENTS", eventsMap);
-                            caldroidFragment.refreshView();
-                        }
+                        eventsList = CalendarEvent.fromJson(response);
+                        refreshEventList();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -282,6 +288,23 @@ public class CalendarActivity extends AppCompatActivity {
         });
         // Adding request to request queue
         RequestQuery.getInstance(this).addToRequestQueue(req);
+    }
+
+    private void refreshEventList(){
+        eventsMap = new HashMap<>();
+        Calendar calendar = Calendar.getInstance();
+        for(CalendarEvent event : eventsList){
+            calendar.setTime(event.fecha);
+            int dayIndex = calendar.get(Calendar.DAY_OF_MONTH);
+            if (eventsMap.containsKey(dayIndex)) {
+                eventsMap.put(dayIndex, eventsMap.get(dayIndex)+1);
+            }else{
+                eventsMap.put(dayIndex, 1);
+            }
+        }
+        Map<String, Object> extraData = caldroidFragment.getExtraData();
+        extraData.put("EVENTS", eventsMap);
+        caldroidFragment.refreshView();
     }
 
     private boolean loadPreferences(){
@@ -306,14 +329,21 @@ public class CalendarActivity extends AppCompatActivity {
         return updatedChannels;
     }
 
-    /**
-     * Save current states of the Caldroid here
-     */
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (caldroidFragment != null) {
-            caldroidFragment.saveStatesToKey(outState, "CALDROID_SAVED_STATE");
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if(caldroidFragment != null){
+            clearEvents();
+            caldroidFragment.saveStatesToKey(savedInstanceState, "CALDROID_SAVED_STATE");
+        }
+
+        if(eventsList != null){
+            savedInstanceState.putParcelableArrayList("EVENTS", eventsList);
+        }
+
+        if(channelsSlidingMenu != null){
+            savedInstanceState.putInt("CHANNEL_SELECTED", channelsSlidingMenu.getSelectedPosition());
         }
     }
+
 }
