@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Callback;
 import com.tomasguti.utnmovil.R;
 
@@ -169,7 +170,7 @@ public class SubjectsActivity extends AppCompatActivity {
                         //FirebaseMessaging.getInstance().subscribeToTopic(code);
                     }else{
                         Log.d(TAG, "unsubscribeFromTopic:"+code);
-                        //FirebaseMessaging.getInstance().unsubscribeFromTopic(code);
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic(code);
                     }
                     comision.activaGuardada = comision.activa;
                 }

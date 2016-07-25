@@ -28,14 +28,15 @@
             android:id="@+id/date"
             android:layout_alignParentTop="true"
             android:textSize="18dp"
-            android:textColor="#616161"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:textColor="#ffffff"
             android:layout_alignLeft="@+id/listView1"
             android:layout_alignStart="@+id/listView1"
             android:layout_alignRight="@+id/listView1"
             android:layout_alignEnd="@+id/listView1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@android:color/holo_blue_light" />
 
         <ListView
             android:layout_width="wrap_content"
@@ -46,8 +47,8 @@
             android:divider="@null"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_marginBottom="5dp"
-            android:layout_below="@+id/date" />
+            android:layout_below="@+id/date"
+            android:paddingTop="2dp" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
