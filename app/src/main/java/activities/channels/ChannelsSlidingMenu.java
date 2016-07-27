@@ -59,6 +59,11 @@ public class ChannelsSlidingMenu extends SlidingMenu {
     }
 
     public void illuminatePostion(int position){
+
+        if(adapter == null){
+            return;
+        }
+
         //Reset Selected
         for(int i=0; i < adapter.getCount(); i++){
             Channel channel = adapter.getItem(i);
@@ -75,6 +80,9 @@ public class ChannelsSlidingMenu extends SlidingMenu {
     }
 
     public int getSelectedPosition(){
+        if(adapter == null){
+            return 0;
+        }
         for(int i=0; i < adapter.getCount(); i++){
             Channel channel = adapter.getItem(i);
             if(channel.selected) {

@@ -50,6 +50,7 @@ public class ChannelsActivity extends AppCompatActivity {
     }
 
     private void updateListView(){
+        listView.setVisibility(View.VISIBLE);
         adapter = new ChannelsAdapter(this, Channel.currents);
         listView = (ListView) findViewById(R.id.listView1);
         listView.setAdapter(adapter);
