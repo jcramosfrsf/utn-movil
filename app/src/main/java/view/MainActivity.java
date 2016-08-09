@@ -17,6 +17,7 @@ package view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -92,6 +93,21 @@ public class MainActivity extends AppCompatActivity {
     public void clickButtonAbout(View view){
         Intent myIntent = new Intent(this, AboutActivity.class);
         startActivity(myIntent);
+    }
+
+    public void clickButtonWeb(View view){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.frsf.utn.edu.ar"));
+        startActivity(browserIntent);
+    }
+
+    public void clickButtonFacebook(View view){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/UTNSantaFe"));
+        startActivity(browserIntent);
+    }
+
+    public void clickButtonTwitter(View view){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/UTNSantaFe"));
+        startActivity(browserIntent);
     }
 
 }

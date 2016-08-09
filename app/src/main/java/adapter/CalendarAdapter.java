@@ -32,7 +32,7 @@ public class CalendarAdapter extends CaldroidGridAdapter {
 
         // For reuse
         if (convertView == null) {
-            cellView = inflater.inflate(R.layout.custom_cell, parent);
+            cellView = inflater.inflate(R.layout.custom_cell, null);
         }
 
         int topPadding = cellView.getPaddingTop();
