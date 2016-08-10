@@ -95,6 +95,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    public void clickButtonLectures(View view){
+        Intent myIntent = new Intent(this, LecturesActivity.class);
+        startActivity(myIntent);
+    }
+
+    public void clickButtonJobs(View view){
+        Intent myIntent = new Intent(this, JobsActivity.class);
+        startActivity(myIntent);
+    }
+
     public void clickButtonWeb(View view){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.frsf.utn.edu.ar"));
         startActivity(browserIntent);

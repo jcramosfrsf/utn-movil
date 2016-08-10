@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tomasguti.utnmovil" >
+    package="com.tomasguti.utnmovil">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -8,11 +8,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="view.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,7 @@
             android:screenOrientation="portrait" />
 
         <!-- [START fcm_listener] -->
-        <service android:name="adapter.notification.MyFcmListenerService" >
+        <service android:name="adapter.notification.MyFcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -34,7 +34,7 @@
 
 
         <!-- [START instanceId_listener] -->
-        <service android:name="adapter.notification.MyInstanceIDListenerService" >
+        <service android:name="adapter.notification.MyInstanceIDListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -43,7 +43,7 @@
         <activity
             android:name="view.NewsActivity"
             android:label="Noticias"
-            android:parentActivityName="view.MainActivity" >
+            android:parentActivityName="view.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -53,7 +53,7 @@
         <activity
             android:name="view.CalendarActivity"
             android:label="Calendario"
-            android:parentActivityName="view.MainActivity" >
+            android:parentActivityName="view.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -65,7 +65,7 @@
         <activity
             android:name="view.ClassroomsActivity"
             android:label="Horarios y Aulas"
-            android:parentActivityName="view.MainActivity" >
+            android:parentActivityName="view.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -77,6 +77,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name="view.AboutActivity" />
+        <activity android:name="view.JobsActivity"></activity>
+        <activity android:name="view.LecturesActivity"></activity>
     </application>
 
 </manifest>

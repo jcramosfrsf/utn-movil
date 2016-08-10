@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:background="#ffffff"
+        android:background="@android:color/holo_blue_dark"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/relativeLayout2"
         android:layout_alignParentTop="true" >
