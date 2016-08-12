@@ -12,6 +12,7 @@
     <string name="channels_error">Error buscando los canales desde el servidor.</string>
     <string name="suscribe_channel">Pulsa en la esquina superior derecha para suscribirte a algún canal.</string>
     <string name="suscribe_subjects">Pulsa en la esquina superior derecha para suscribirte a alguna materia.</string>
+    <string name="no_connection">Comprueba la conexión de tu dispositivo.</string>
     <string name="subject_no_info">Sin información.</string>
     <string name="subject_error">Error.</string>
     <string name="my_channels">Mis Canales</string>

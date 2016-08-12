@@ -33,6 +33,7 @@ import model.New;
 public class NewFullActivity extends AppCompatActivity {
 
     private New newItem;
+    private int layoutWidth = 480;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,12 @@ public class NewFullActivity extends AppCompatActivity {
         body.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        layoutWidth = findViewById(R.id.layout).getWidth();
+    }
+
     class ImgHandler extends TagNodeHandler {
 
         private TextView textView;
@@ -80,7 +87,7 @@ public class NewFullActivity extends AppCompatActivity {
 
             builder.append("\uFFFC");
             LevelListDrawable drawable = new LevelListDrawable();
-            Drawable empty = getResources().getDrawable(R.drawable.abc_btn_check_material);;
+            Drawable empty = getResources().getDrawable(R.drawable.abc_btn_check_material);
             drawable.addLevel(0, 0, empty);
             drawable.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
             new ImageGetterAsyncTask(getApplicationContext(), src, drawable).execute(textView);
@@ -119,7 +126,11 @@ public class NewFullActivity extends AppCompatActivity {
                 Drawable d = new BitmapDrawable(getResources(), bitmap);
                 levelListDrawable.addLevel(1, 1, d);
                 // Set bounds width  and height according to the bitmap resized size
-                levelListDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                float ratio = (float) layoutWidth/bitmap.getWidth();
+                if(ratio > 1.0f){
+                    ratio = 1.0f;
+                }
+                levelListDrawable.setBounds(0, 0, Math.round(bitmap.getWidth()*ratio), Math.round(bitmap.getHeight()*ratio));
                 levelListDrawable.setLevel(1);
                 t.setText(t.getText()); // invalidate() doesn't work correctly...
             } catch (Exception e) { /* Like a null bitmap, etc. */ }

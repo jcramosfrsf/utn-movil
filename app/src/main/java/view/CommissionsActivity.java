@@ -55,6 +55,10 @@ public class CommissionsActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        int careerSavedIndex  = sp.getInt("carrera", 0);
+        spinner.setSelection(careerSavedIndex, true);
+
         spinner.setEnabled(false);
 
         textViewMateria = (TextView) findViewById(R.id.textViewMateria);
@@ -166,13 +170,14 @@ public class CommissionsActivity extends AppCompatActivity {
             for(Comision comision : materia.comisiones){
                 String code = materia.id_carrera+"-"+materia.id+"-"+comision.id;
                 if(comision.activa != comision.activaGuardada){
+                    /*
                     if (comision.activa) {
                         Log.d(TAG, "subscribeToTopic:"+code);
                         //FirebaseMessaging.getInstance().subscribeToTopic(code);
                     }else{
                         Log.d(TAG, "unsubscribeFromTopic:"+code);
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic(code);
-                    }
+                        //FirebaseMessaging.getInstance().unsubscribeFromTopic(code);
+                    }*/
                     comision.activaGuardada = comision.activa;
                 }
                 if (comision.activa && comision.activaGuardada) {
@@ -181,6 +186,7 @@ public class CommissionsActivity extends AppCompatActivity {
             }
         }
         editor.putStringSet("commissions", set);
+        editor.putInt("carrera", spinner.getSelectedItemPosition());
         editor.apply();
     }
 
