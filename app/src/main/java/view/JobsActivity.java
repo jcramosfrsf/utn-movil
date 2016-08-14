@@ -27,12 +27,15 @@ import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 
+import adapter.ImgHandler;
 import model.utils.RequestQuery;
 
 public class JobsActivity extends AppCompatActivity {
 
     TextView htmlContent;
     ProgressBar progressBarRequest;
+    private int layoutWidth = 480;
+    private ImgHandler imageHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,12 @@ public class JobsActivity extends AppCompatActivity {
         progressBarRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
         htmlContent = (TextView) findViewById(R.id.htmlContent);
         loadDataFromServer();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        layoutWidth = findViewById(R.id.scroll).getWidth();
     }
 
     public void loadDataFromServer(){
@@ -70,6 +79,12 @@ public class JobsActivity extends AppCompatActivity {
                                 link.attr("href", "http://www.frsf.utn.edu.ar"+link.attr("href"));
                             }
                         }
+                        Elements imgs = body.select("img");
+                        for(Element img : imgs){
+                            if(img.attr("src").startsWith("/")){
+                                img.attr("src", "http://www.frsf.utn.edu.ar"+img.attr("src"));
+                            }
+                        }
 
                         Element mcePaste = body.getElementById("_mcePaste");
                         if(mcePaste != null){
@@ -77,6 +92,10 @@ public class JobsActivity extends AppCompatActivity {
                         }
 
                         HtmlSpanner htmlSpanner = new HtmlSpanner();
+                        htmlSpanner.unregisterHandler("img");
+                        imageHandler = new ImgHandler(getApplicationContext(), htmlContent);
+                        imageHandler.setMaxWidth(layoutWidth);
+                        htmlSpanner.registerHandler("img", imageHandler);
                         Spannable spanned = htmlSpanner.fromHtml( body.toString());
                         htmlContent.setText(spanned);
                         htmlContent.setMovementMethod(LinkMovementMethod.getInstance());

@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="view.JobsActivity">
+    android:id="@+id/layout"
+    tools:context="view.JobsActivity"
+    android:padding="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,12 +19,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
             android:id="@+id/htmlContent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:textSize="18dp"
-            android:textColor="#616161"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="5dp" />
+            android:textColor="#616161" />
     </ScrollView>
 
     <ProgressBar
