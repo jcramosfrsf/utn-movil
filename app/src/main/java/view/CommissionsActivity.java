@@ -11,12 +11,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Callback;
 import com.tomasguti.utnmovil.R;
 
@@ -39,6 +39,7 @@ public class CommissionsActivity extends AppCompatActivity {
     private Spinner spinner;
     private ListView listViewCommisions;
     private CommissionsAdapter commissionsAdapter;
+    private ImageButton clearButton;
 
     private TextView textViewMateria;
     private TextView textViewComision;
@@ -55,16 +56,13 @@ public class CommissionsActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        int careerSavedIndex  = sp.getInt("carrera", 0);
-        spinner.setSelection(careerSavedIndex, true);
-
         spinner.setEnabled(false);
 
         textViewMateria = (TextView) findViewById(R.id.textViewMateria);
         textViewComision = (TextView) findViewById(R.id.textViewComision);
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         listViewCommisions = (ListView) findViewById(R.id.listViewCommisions);
+        clearButton = (ImageButton) findViewById(R.id.clearButton);
 
         ArrayList<Comision> comisiones = new ArrayList<>();
         commissionsAdapter = new CommissionsAdapter(getApplicationContext(), comisiones);
@@ -73,6 +71,7 @@ public class CommissionsActivity extends AppCompatActivity {
         textViewComision.setVisibility(View.INVISIBLE);
         listViewCommisions.setVisibility(View.INVISIBLE);
         autoCompleteTextView.setVisibility(View.INVISIBLE);
+        clearButton.setVisibility(View.INVISIBLE);
 
         Materia.loadFromServer(this, callbackGetMaterias);
     }
@@ -86,6 +85,9 @@ public class CommissionsActivity extends AppCompatActivity {
             autoCompleteTextView.setOnItemClickListener(new AutoCompleteListener());
             autoCompleteTextView.setOnFocusChangeListener(new AutoCompleteOnFocusListener());
             autoCompleteTextView.setThreshold(1);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            int careerSavedIndex  = sp.getInt("carrera", 0);
+            spinner.setSelection(careerSavedIndex, true);
         }
 
         @Override
@@ -136,11 +138,13 @@ public class CommissionsActivity extends AppCompatActivity {
                 autoCompleteTextView.setAdapter(autoCompleteAdapter);
                 textViewMateria.setVisibility(View.VISIBLE);
                 autoCompleteTextView.setVisibility(View.VISIBLE);
+                clearButton.setVisibility(View.VISIBLE);
                 textViewComision.setVisibility(View.INVISIBLE);
                 listViewCommisions.setVisibility(View.INVISIBLE);
             }else{
                 textViewMateria.setVisibility(View.INVISIBLE);
                 autoCompleteTextView.setVisibility(View.INVISIBLE);
+                clearButton.setVisibility(View.INVISIBLE);
                 textViewComision.setVisibility(View.INVISIBLE);
                 listViewCommisions.setVisibility(View.INVISIBLE);
             }
@@ -220,6 +224,12 @@ public class CommissionsActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void clearAutocomplete(View v){
+        Log.d(TAG, "clearAutocomplete");
+        autoCompleteTextView.setText("");
+        autoCompleteTextView.requestFocus();
     }
 
 }

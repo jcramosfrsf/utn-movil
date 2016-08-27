@@ -8,8 +8,8 @@ android {
         applicationId "com.tomasguti.utnmovil"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 5
-        versionName "0.9.2"
+        versionCode 6
+        versionName "0.9.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +36,7 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'com.github.orangegangsters:swipy:1.2.3@aar'
+    compile 'com.android.support:design:24.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

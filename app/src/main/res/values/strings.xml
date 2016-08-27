@@ -16,6 +16,8 @@
     <string name="subject_no_info">Sin información.</string>
     <string name="subject_error">Error.</string>
     <string name="my_channels">Mis Canales</string>
+    <string name="tab_credits">Créditos</string>
+    <string name="tab_licenses">Licencias</string>
     <string-array name="careers_array">
         <item>Selecciona una carrera…</item>
         <item>Ingeniería en Sistemas de Información</item>
