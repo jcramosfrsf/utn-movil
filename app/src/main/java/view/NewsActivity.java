@@ -62,8 +62,16 @@ public class NewsActivity extends AppCompatActivity implements SwipyRefreshLayou
         setSupportActionBar(myToolbar);
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-        // Enable the Up button
+        ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
+
+        myToolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                channelsSlidingMenu.showMenu();
+            }
+        });
 
         String tag = "noticias";
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

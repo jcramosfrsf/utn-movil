@@ -61,11 +61,14 @@ public class CalendarActivity extends AppCompatActivity {
     Map<Integer, Integer> eventsMap;
     private ChannelsSlidingMenu channelsSlidingMenu;
     private boolean skipChangeMonth;
+    private boolean activityRestarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        activityRestarted = false;
 
         channelsSlidingMenu = new ChannelsSlidingMenu(this, filterSingleChannelListener);
         channelsSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
@@ -73,7 +76,16 @@ public class CalendarActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
+        ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
+
+        myToolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                channelsSlidingMenu.showMenu();
+            }
+        });
 
         String tag = "eventos";
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -219,12 +231,19 @@ public class CalendarActivity extends AppCompatActivity {
         if(jsonChannels.length() == 0){
             Toast.makeText(getApplicationContext(), R.string.suscribe_channel, Toast.LENGTH_LONG).show();
             clearEvents();
-        }else if(needUpdate){
-            Log.d(TAG, "onResume "+ needUpdate);
+        }else if(needUpdate || activityRestarted){
+            activityRestarted = false;
+            channelsSlidingMenu.illuminatePostion(0);
             caldroidFragment.getCaldroidListener().onChangeMonth(caldroidFragment.getMonth(), caldroidFragment.getYear());
         }
 
         super.onResume();
+    }
+
+    @Override
+    public void onRestart(){
+        activityRestarted = true;
+        super.onRestart();
     }
 
     private void clearEvents(){
@@ -333,8 +352,8 @@ public class CalendarActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         if(caldroidFragment != null){
-            clearEvents();
             caldroidFragment.saveStatesToKey(savedInstanceState, "CALDROID_SAVED_STATE");
+            clearEvents();
         }
 
         if(eventsList != null){

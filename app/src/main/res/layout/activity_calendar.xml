@@ -18,34 +18,15 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:background="@android:color/holo_blue_dark"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/relativeLayout2"
-        android:layout_alignParentTop="true" >
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right_black_12dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="false" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/calendarView"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_below="@+id/my_toolbar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     </RelativeLayout>
 
@@ -54,9 +35,7 @@
         android:layout_height="match_parent"
         android:id="@+id/eventsFull"
         android:visibility="invisible"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_toRightOf="@+id/relativeLayout2"
-        android:layout_toEndOf="@+id/relativeLayout2">
+        android:layout_below="@+id/my_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"

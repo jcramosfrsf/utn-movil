@@ -19,26 +19,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:background="@android:color/holo_blue_dark"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true">
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right_black_12dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="false"></FrameLayout>
-    </RelativeLayout>
-
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_refresh_layout"
@@ -48,8 +28,6 @@
         app:srl_direction="both"
         android:layout_below="@+id/my_toolbar"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/linearLayout"
-        android:layout_toEndOf="@+id/linearLayout"
         android:layout_marginLeft="2dp">
 
         <ListView
